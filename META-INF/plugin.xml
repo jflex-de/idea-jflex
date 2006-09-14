@@ -1,0 +1,22 @@
+<!DOCTYPE idea-plugin PUBLIC "Plugin/DTD" "http://plugins.intellij.net/plugin.dtd">
+<idea-plugin>
+    <vendor>Alexey Efimov</vendor>
+
+    <name>JFlex Support</name>
+    <version>1.0.2</version>
+
+    <description>Enables JFlex support in IntelliJ IDEA.</description>
+    <resource-bundle>org.intellij.lang.jflex.util.JFlexBundle</resource-bundle>
+
+    <idea-version since-build="5231"/>
+
+    <application-components>
+        <component>
+            <interface-class>org.intellij.lang.jflex.fileTypes.JFlexFileTypeManager</interface-class>
+            <implementation-class>org.intellij.lang.jflex.fileTypes.impl.JFlexFileTypeManagerImpl</implementation-class>
+        </component>
+        <component>
+            <implementation-class>org.intellij.lang.jflex.editor.colors.JFlexEditorColorsManager</implementation-class>
+        </component>
+    </application-components>
+</idea-plugin>
