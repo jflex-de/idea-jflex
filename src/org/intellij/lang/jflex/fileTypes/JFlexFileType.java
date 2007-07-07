@@ -2,11 +2,11 @@ package org.intellij.lang.jflex.fileTypes;
 
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.openapi.util.IconLoader;
+import org.intellij.lang.jflex.JFlexLanguage;
+import org.intellij.lang.jflex.util.JFlexBundle;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.intellij.lang.jflex.JFlexLanguage;
-import org.intellij.lang.jflex.util.JFlexBundle;
 
 import javax.swing.*;
 
@@ -17,7 +17,7 @@ import javax.swing.*;
  */
 public final class JFlexFileType extends LanguageFileType {
     @NonNls
-    public static final String[] DEFAULT_ASSOCIATED_EXTENSIONS = new String[] {"flex"};
+    public static final String[] DEFAULT_ASSOCIATED_EXTENSIONS = new String[]{"flex"};
 
     public JFlexFileType() {
         super(new JFlexLanguage());
