@@ -1,10 +1,14 @@
 package org.intellij.lang.jflex;
 
+import com.intellij.lang.Language;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 
-public interface JFlexTokenTypes {
+public interface JFlexElementTypes {
+    IFileElementType FILE = new IFileElementType(Language.findInstance(JFlexLanguage.class));
+
     IElementType BAD_CHARACTER = TokenType.BAD_CHARACTER;
     IElementType WHITE_SPACE = TokenType.WHITE_SPACE;
 
@@ -110,114 +114,125 @@ public interface JFlexTokenTypes {
     IElementType TRUE_KEYWORD = new JFlexElementType("TRUE_KEYWORD");
 
     TokenSet OPTION_KEYWORDS = TokenSet.create(
-        CLASS_KEYWORD,
-        IMPLEMENTS_KEYWORD,
-        EXTENDS_KEYWORD,
-        PUBLIC_KEYWORD,
-        FINAL_KEYWORD,
-        ABSTRACT_KEYWORD,
-        APIPRIVATE_KEYWORD,
-        INIT_KEYWORD,
-        INITTHROW_KEYWORD,
-        SCANERROR_KEYWORD,
-        BUFFERSIZE_KEYWORD,
-        INCLUDE_KEYWORD,
-        FUNCTION_KEYWORD,
-        INT_KEYWORD,
-        INTEGER_KEYWORD,
-        INTWRAP_KEYWORD,
-        TYPE_KEYWORD,
-        YYLEXTHROW_KEYWORD,
-        EOF_KEYWORD,
-        EOFVAL_KEYWORD,
-        EOFTHROW_KEYWORD,
-        EOFCLOSE_KEYWORD,
-        DEBUG_KEYWORD,
-        STANDALONE_KEYWORD,
-        CUP_KEYWORD,
-        CUPSYM_KEYWORD,
-        CUPDEBUG_KEYWORD,
-        BYACC_KEYWORD,
-        SWITCH_KEYWORD,
-        TABLE_KEYWORD,
-        PACK_KEYWORD,
-        _7BIT_KEYWORD,
-        _8BIT_KEYWORD,
-        _16BIT_KEYWORD,
-        FULL_KEYWORD,
-        UNICODE_KEYWORD,
-        CASELESS_KEYWORD,
-        IGNORECASE_KEYWORD,
-        CHAR_KEYWORD,
-        LINE_KEYWORD,
-        COLUMN_KEYWORD,
-        NOTUNIX_KEYWORD,
-        YYEOF_KEYWORD,
-        STATE_KEYWORD,
-        S_KEYWORD,
-        XSTATE_KEYWORD,
-        X_KEYWORD,
-        FALSE_KEYWORD,
-        TRUE_KEYWORD
+            CLASS_KEYWORD,
+            IMPLEMENTS_KEYWORD,
+            EXTENDS_KEYWORD,
+            PUBLIC_KEYWORD,
+            FINAL_KEYWORD,
+            ABSTRACT_KEYWORD,
+            APIPRIVATE_KEYWORD,
+            INIT_KEYWORD,
+            INITTHROW_KEYWORD,
+            SCANERROR_KEYWORD,
+            BUFFERSIZE_KEYWORD,
+            INCLUDE_KEYWORD,
+            FUNCTION_KEYWORD,
+            INT_KEYWORD,
+            INTEGER_KEYWORD,
+            INTWRAP_KEYWORD,
+            TYPE_KEYWORD,
+            YYLEXTHROW_KEYWORD,
+            EOF_KEYWORD,
+            EOFVAL_KEYWORD,
+            EOFTHROW_KEYWORD,
+            EOFCLOSE_KEYWORD,
+            DEBUG_KEYWORD,
+            STANDALONE_KEYWORD,
+            CUP_KEYWORD,
+            CUPSYM_KEYWORD,
+            CUPDEBUG_KEYWORD,
+            BYACC_KEYWORD,
+            SWITCH_KEYWORD,
+            TABLE_KEYWORD,
+            PACK_KEYWORD,
+            _7BIT_KEYWORD,
+            _8BIT_KEYWORD,
+            _16BIT_KEYWORD,
+            FULL_KEYWORD,
+            UNICODE_KEYWORD,
+            CASELESS_KEYWORD,
+            IGNORECASE_KEYWORD,
+            CHAR_KEYWORD,
+            LINE_KEYWORD,
+            COLUMN_KEYWORD,
+            NOTUNIX_KEYWORD,
+            YYEOF_KEYWORD,
+            STATE_KEYWORD,
+            S_KEYWORD,
+            XSTATE_KEYWORD,
+            X_KEYWORD,
+            FALSE_KEYWORD,
+            TRUE_KEYWORD
     );
 
     TokenSet OPERATORS = TokenSet.create(
-        EQ,
-        OR
+            EQ,
+            OR
     );
 
     TokenSet BRACES = TokenSet.create(
-        LEFT_BRACE,
-        RIGHT_BRACE
+            LEFT_BRACE,
+            RIGHT_BRACE
     );
 
     TokenSet BRACKETS = TokenSet.create(
-        LEFT_BRACKET,
-        RIGHT_BRACKET
+            LEFT_BRACKET,
+            RIGHT_BRACKET
     );
 
     TokenSet PARENTHESES = TokenSet.create(
-        LEFT_PARENTHESIS,
-        RIGHT_PARENTHESIS
+            LEFT_PARENTHESIS,
+            RIGHT_PARENTHESIS
     );
 
     TokenSet ANGLE_BRACKETS = TokenSet.create(
-        LEFT_ANGLE_BRACKET,
-        RIGHT_ANGLE_BRACKET
+            LEFT_ANGLE_BRACKET,
+            RIGHT_ANGLE_BRACKET
     );
 
     TokenSet OPTION_SCOPE = TokenSet.orSet(OPTION_KEYWORDS, TokenSet.create(
-        OPTION_COMMA,
-        OPTION_LEFT_BRACE,
-        OPTION_RIGHT_BRACE,
-        OPTION_SIGN,
-        OPTION_WHITE_SPACE,
-        OPTION_PARAMETER
+            OPTION_COMMA,
+            OPTION_LEFT_BRACE,
+            OPTION_RIGHT_BRACE,
+            OPTION_SIGN,
+            OPTION_WHITE_SPACE,
+            OPTION_PARAMETER
     ));
 
     TokenSet REGEXP_SCOPE = TokenSet.create(
-        REGEXP_STRING_LITERAL,
-        REGEXP_CLASS_SYMBOL,
-        REGEXP_LEFT_BRACKET,
-        REGEXP_LEFT_PARENTHESIS,
-        REGEXP_LEFT_BRACE,
-        REGEXP_RIGHT_BRACKET,
-        REGEXP_RIGHT_PARENTHESIS,
-        REGEXP_RIGHT_BRACE,
-        REGEXP_OR,
-        REGEXP_POSTFIX,
-        REGEXP_PREFIX,
-        REGEXP_SYMBOL,
-        REGEXP_MACROS_REF,
-        REGEXP_WHITE_SPACE
+            REGEXP_STRING_LITERAL,
+            REGEXP_CLASS_SYMBOL,
+            REGEXP_LEFT_BRACKET,
+            REGEXP_LEFT_PARENTHESIS,
+            REGEXP_LEFT_BRACE,
+            REGEXP_RIGHT_BRACKET,
+            REGEXP_RIGHT_PARENTHESIS,
+            REGEXP_RIGHT_BRACE,
+            REGEXP_OR,
+            REGEXP_POSTFIX,
+            REGEXP_PREFIX,
+            REGEXP_SYMBOL,
+            REGEXP_MACROS_REF,
+            REGEXP_WHITE_SPACE
     );
 
     TokenSet STATE_SCOPE = TokenSet.create(
-        STATE_COMMA,
-        STATE_REF,
-        STATE_LEFT_ANGLE_BRACKET,
-        STATE_RIGHT_ANGLE_BRACKET
+            STATE_COMMA,
+            STATE_REF,
+            STATE_LEFT_ANGLE_BRACKET,
+            STATE_RIGHT_ANGLE_BRACKET
     );
 
+    TokenSet WHITE_SPACES = TokenSet.create(
+            WHITE_SPACE,
+            OPTION_WHITE_SPACE,
+            REGEXP_WHITE_SPACE
+    );
 
+    TokenSet COMMENTS = TokenSet.create(COMMENT);
+
+    TokenSet EXPRESSIONS = TokenSet.create(
+            OPTION_PARAMETER
+    );
+    IElementType CLASS_STATEMENT = new JFlexElementType("CLASS_STATEMENT");
 }

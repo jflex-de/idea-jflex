@@ -7,7 +7,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.tree.IElementType;
 import org.intellij.lang.jflex.JFlexElementType;
-import org.intellij.lang.jflex.JFlexTokenTypes;
+import org.intellij.lang.jflex.JFlexElementTypes;
 import org.intellij.lang.jflex.editor.JFlexHighlighterColors;
 import org.intellij.lang.jflex.lexer.JFlexHighlighterLexer;
 import org.jetbrains.annotations.NotNull;
@@ -29,37 +29,36 @@ public final class JFlexSyntaxHighlighter extends SyntaxHighlighterBase {
     public JFlexSyntaxHighlighter(Project project, VirtualFile virtualFile) {
         lexer = new JFlexHighlighterLexer(project, virtualFile);
 
-        fillMap(colors, JFlexTokenTypes.BRACES, JFlexHighlighterColors.BRACES);
-        fillMap(colors, JFlexTokenTypes.BRACKETS, JFlexHighlighterColors.BRACKETS);
-        fillMap(colors, JFlexTokenTypes.PARENTHESES, JFlexHighlighterColors.PARENTHS);
-        fillMap(colors, JFlexTokenTypes.ANGLE_BRACKETS, JFlexHighlighterColors.ANGLE_BRACKETS);
+        fillMap(colors, JFlexElementTypes.BRACES, JFlexHighlighterColors.BRACES);
+        fillMap(colors, JFlexElementTypes.BRACKETS, JFlexHighlighterColors.BRACKETS);
+        fillMap(colors, JFlexElementTypes.PARENTHESES, JFlexHighlighterColors.PARENTHS);
+        fillMap(colors, JFlexElementTypes.ANGLE_BRACKETS, JFlexHighlighterColors.ANGLE_BRACKETS);
 
-        fillMap(colors, JFlexTokenTypes.OPERATORS, JFlexHighlighterColors.OPERATION_SIGN);
+        fillMap(colors, JFlexElementTypes.OPERATORS, JFlexHighlighterColors.OPERATION_SIGN);
 
-        colors.put(JFlexTokenTypes.BAD_CHARACTER, JFlexHighlighterColors.BAD_CHARACTER);
-        colors.put(JFlexTokenTypes.COMMENT, JFlexHighlighterColors.COMMENT);
-        colors.put(JFlexTokenTypes.STRING_LITERAL, JFlexHighlighterColors.STRING);
-        colors.put(JFlexTokenTypes.COMMA, JFlexHighlighterColors.COMMA);
+        colors.put(JFlexElementTypes.BAD_CHARACTER, JFlexHighlighterColors.BAD_CHARACTER);
+        colors.put(JFlexElementTypes.COMMENT, JFlexHighlighterColors.COMMENT);
+        colors.put(JFlexElementTypes.STRING_LITERAL, JFlexHighlighterColors.STRING);
+        colors.put(JFlexElementTypes.COMMA, JFlexHighlighterColors.COMMA);
 
-        backgrounds.put(JFlexTokenTypes.JAVA_CODE, JFlexHighlighterColors.JAVA_CODE);
+        backgrounds.put(JFlexElementTypes.JAVA_CODE, JFlexHighlighterColors.JAVA_CODE);
 
-        colors.put(JFlexTokenTypes.MACROS, JFlexHighlighterColors.MACROS);
-        colors.put(JFlexTokenTypes.MACROS_REF, JFlexHighlighterColors.MACROS_REF);
+        colors.put(JFlexElementTypes.MACROS, JFlexHighlighterColors.MACROS);
+        colors.put(JFlexElementTypes.MACROS_REF, JFlexHighlighterColors.MACROS_REF);
 
 
+        colors.put(JFlexElementTypes.STATE_REF, JFlexHighlighterColors.STATE_REF);
 
-        colors.put(JFlexTokenTypes.STATE_REF, JFlexHighlighterColors.STATE_REF);
+        fillMap(backgrounds, JFlexElementTypes.REGEXP_SCOPE, JFlexHighlighterColors.REGEXP_BACKGROUND);
+        colors.put(JFlexElementTypes.REGEXP_SYMBOL, JFlexHighlighterColors.REGEXP_SYMBOL);
+        colors.put(JFlexElementTypes.REGEXP_CLASS_SYMBOL, JFlexHighlighterColors.REGEXP_CLASS_SYMBOL);
 
-        fillMap(backgrounds, JFlexTokenTypes.REGEXP_SCOPE, JFlexHighlighterColors.REGEXP_BACKGROUND);
-        colors.put(JFlexTokenTypes.REGEXP_SYMBOL, JFlexHighlighterColors.REGEXP_SYMBOL);
-        colors.put(JFlexTokenTypes.REGEXP_CLASS_SYMBOL, JFlexHighlighterColors.REGEXP_CLASS_SYMBOL);
+        fillMap(backgrounds, JFlexElementTypes.OPTION_SCOPE, JFlexHighlighterColors.OPTION_BACKGROUND);
+        fillMap(colors, JFlexElementTypes.OPTION_KEYWORDS, JFlexHighlighterColors.OPTION_KEYWORD);
+        colors.put(JFlexElementTypes.OPTION_PARAMETER, JFlexHighlighterColors.OPTION_PARAMETER);
+        colors.put(JFlexElementTypes.OPTION_SIGN, JFlexHighlighterColors.OPTION_SIGN);
 
-        fillMap(backgrounds, JFlexTokenTypes.OPTION_SCOPE, JFlexHighlighterColors.OPTION_BACKGROUND);
-        fillMap(colors, JFlexTokenTypes.OPTION_KEYWORDS, JFlexHighlighterColors.OPTION_KEYWORD);
-        colors.put(JFlexTokenTypes.OPTION_PARAMETER, JFlexHighlighterColors.OPTION_PARAMETER);
-        colors.put(JFlexTokenTypes.OPTION_SIGN, JFlexHighlighterColors.OPTION_SIGN);
-
-        colors.put(JFlexTokenTypes.SECTION_SIGN, JFlexHighlighterColors.SECTION_SIGN);
+        colors.put(JFlexElementTypes.SECTION_SIGN, JFlexHighlighterColors.SECTION_SIGN);
     }
 
     @NotNull
@@ -75,7 +74,7 @@ public final class JFlexSyntaxHighlighter extends SyntaxHighlighterBase {
     private TextAttributesKey getAttributeKeys(IElementType tokenType, Map<IElementType, TextAttributesKey> map) {
         TextAttributesKey attributes = map.get(tokenType);
         if (attributes == null && tokenType instanceof JFlexElementType) {
-            return map.get(((JFlexElementType)tokenType).getParsedType());
+            return map.get(((JFlexElementType) tokenType).getParsedType());
         }
         return map.get(tokenType);
     }

@@ -5,20 +5,20 @@ import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.openapi.options.colors.AttributesDescriptor;
 import com.intellij.openapi.options.colors.ColorDescriptor;
 import com.intellij.openapi.options.colors.ColorSettingsPage;
+import org.intellij.lang.jflex.editor.JFlexHighlighterColors;
+import org.intellij.lang.jflex.fileTypes.JFlexFileTypeManager;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.intellij.lang.jflex.fileTypes.JFlexFileTypeManager;
-import org.intellij.lang.jflex.editor.JFlexHighlighterColors;
 
 import javax.swing.*;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.HashSet;
 
 final class JFlexColorPage implements ColorSettingsPage {
-    private static final AttributesDescriptor[] EMPTY_ATTRIBUTES_DESCRIPTOR_ARRAY = new AttributesDescriptor[] {};
-    private static final ColorDescriptor[] EMPTY_COLOR_DESCRIPTOR_ARRAY = new ColorDescriptor[] {};
+    private static final AttributesDescriptor[] EMPTY_ATTRIBUTES_DESCRIPTOR_ARRAY = new AttributesDescriptor[]{};
+    private static final ColorDescriptor[] EMPTY_COLOR_DESCRIPTOR_ARRAY = new ColorDescriptor[]{};
 
     private final Set<AttributesDescriptor> attributeDescriptors = new HashSet<AttributesDescriptor>();
 
@@ -64,18 +64,18 @@ final class JFlexColorPage implements ColorSettingsPage {
     @NotNull
     public String getDemoText() {
         return "package org.intellij.lang.jflex;\n" +
-            "%%\n" +
-            "%class Lexer\n" +
-            "/* Macros */\n" +
-            "LineTerminator = \\r|\\n|\\r\\n\n" +
-            "WhiteSpace = ({LineTerminator} | [ \\t\\f])+\n" +
-            "// States\n" +
-            "%state SAMPLE\n" +
-            "%%\n" +
-            "<SAMPLE, YYINITIAL> {\n" +
-            "  // Rule\n" +
-            "  \"foo\" { foo(); }\n" +
-            "}";
+                "%%\n" +
+                "%class Lexer\n" +
+                "/* Macros */\n" +
+                "LineTerminator = \\r|\\n|\\r\\n\n" +
+                "WhiteSpace = ({LineTerminator} | [ \\t\\f])+\n" +
+                "// States\n" +
+                "%state SAMPLE\n" +
+                "%%\n" +
+                "<SAMPLE, YYINITIAL> {\n" +
+                "  // Rule\n" +
+                "  \"foo\" { foo(); }\n" +
+                "}";
     }
 
     @NotNull

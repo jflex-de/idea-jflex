@@ -1,8 +1,8 @@
 package org.intellij.lang.jflex.util;
 
 import com.intellij.CommonBundle;
-import org.jetbrains.annotations.PropertyKey;
 import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.PropertyKey;
 
 import java.util.ResourceBundle;
 
@@ -14,7 +14,7 @@ public final class JFlexBundle {
     private JFlexBundle() {
     }
 
-    public static String message(@PropertyKey(resourceBundle = BUNDLE_NAME) String key, Object... params) {
+    public static String message(@PropertyKey(resourceBundle = BUNDLE_NAME)String key, Object... params) {
         return CommonBundle.message(BUNDLE, key, params);
     }
 }

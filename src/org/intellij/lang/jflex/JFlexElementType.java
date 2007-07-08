@@ -25,6 +25,6 @@ public class JFlexElementType extends IElementType {
 
     @SuppressWarnings({"HardCodedStringLiteral"})
     public String toString() {
-      return MessageFormat.format("JFlex:{0}", super.toString());
+        return MessageFormat.format("JFlex:{0}", super.toString());
     }
 }

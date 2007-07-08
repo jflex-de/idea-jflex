@@ -168,8 +168,15 @@ public final class JFlexSettingsForm implements PersistentStateComponent<JFlexSe
         if (StringUtil.isEmptyOrSpaces(text)) {
             Messages.showWarningDialog(jFlexHomeTextField, JFlexBundle.message("please.enter.path.to.jflex.home.directory"), JFlexBundle.message("jflex"));
             jFlexHomeTextField.requestFocus();
+            return false;
         }
-        return false;
+
+        // All fine add to history
+        jFlexHomeTextField.getChildComponent().addCurrentTextToHistory();
+        skeletonPathTextField.getChildComponent().addCurrentTextToHistory();
+        commandLineOptionsTextField.addCurrentTextToHistory();
+
+        return true;
     }
 
     public final void loadState(JFlexSettings state) {
