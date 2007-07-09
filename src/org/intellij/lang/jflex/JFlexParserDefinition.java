@@ -17,6 +17,7 @@ import org.intellij.lang.jflex.lexer.JFlexParsingLexer;
 import org.intellij.lang.jflex.parser.JFlexParser;
 import org.intellij.lang.jflex.psi.JFlexPsiFile;
 import org.intellij.lang.jflex.psi.impl.JFlexClassStatementImpl;
+import org.intellij.lang.jflex.psi.impl.JFlexExpressionImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -53,9 +54,8 @@ public class JFlexParserDefinition implements ParserDefinition {
         IElementType type = node.getElementType();
         if (type == JFlexElementTypes.CLASS_STATEMENT) {
             return new JFlexClassStatementImpl(node);
-
         }
-        return new ASTWrapperPsiElement(node);
+        return new JFlexExpressionImpl(node);
     }
 
     public PsiFile createFile(FileViewProvider viewProvider) {
