@@ -3,12 +3,12 @@
     <vendor>Alexey Efimov</vendor>
 
     <name>JFlex Support</name>
-    <version>1.0.2</version>
+    <version>1.1</version>
 
     <description>Enables JFlex support in IntelliJ IDEA.</description>
     <resource-bundle>org.intellij.lang.jflex.util.JFlexBundle</resource-bundle>
 
-    <idea-version since-build="7041"/>
+    <idea-version since-build="7051"/>
 
     <extensions xmlns="com.intellij">
         <applicationConfigurable implementation="org.intellij.lang.jflex.options.JFlexConfigurable"/>
@@ -23,4 +23,10 @@
             <implementation-class>org.intellij.lang.jflex.options.JFlexSettings</implementation-class>
         </component>
     </application-components>
+
+    <project-components>
+        <component>
+            <implementation-class>org.intellij.lang.jflex.compiler.JFlexSourceGeneratingCompiler</implementation-class>
+        </component>
+    </project-components>
 </idea-plugin>

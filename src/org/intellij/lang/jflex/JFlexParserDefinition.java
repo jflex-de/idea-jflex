@@ -1,6 +1,5 @@
 package org.intellij.lang.jflex;
 
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LanguageUtil;
 import com.intellij.lang.ParserDefinition;
