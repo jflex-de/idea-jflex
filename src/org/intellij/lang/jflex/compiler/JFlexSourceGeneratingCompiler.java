@@ -40,21 +40,7 @@ public class JFlexSourceGeneratingCompiler implements SourceGeneratingCompiler {
         Module[] affectedModules = context.getCompileScope().getAffectedModules();
         if (affectedModules != null && affectedModules.length > 0) {
             Application application = ApplicationManager.getApplication();
-            return application.runReadAction(new Computable<GenerationItem[]>() {
-                public GenerationItem[] compute() {
-                    CompileScope compileScope = context.getCompileScope();
-                    VirtualFile[] files = compileScope.getFiles(JFlexFileTypeManager.getInstance().getFileType(), false);
-                    if (files != null) {
-                        GenerationItem[] items = new GenerationItem[files.length];
-                        for (int i = 0; i < files.length; i++) {
-                            VirtualFile file = files[i];
-                            items[i] = new JFlexGenerationItem(context.getModuleByFile(file), file);
-                        }
-                        return items;
-                    }
-                    return EMPTY_GENERATION_ITEM_ARRAY;
-                }
-            });
+            return application.runReadAction(new PrepareAction(context));
         }
         return EMPTY_GENERATION_ITEM_ARRAY;
     }
@@ -184,6 +170,28 @@ public class JFlexSourceGeneratingCompiler implements SourceGeneratingCompiler {
 
         public String getGeneratedClassName() {
             return generatedClassName;
+        }
+    }
+
+    private static class PrepareAction implements Computable<GenerationItem[]> {
+        private final CompileContext context;
+
+        public PrepareAction(CompileContext context) {
+            this.context = context;
+        }
+
+        public GenerationItem[] compute() {
+            CompileScope compileScope = context.getCompileScope();
+            VirtualFile[] files = compileScope.getFiles(JFlexFileTypeManager.getInstance().getFileType(), false);
+            if (files != null) {
+                GenerationItem[] items = new GenerationItem[files.length];
+                for (int i = 0; i < files.length; i++) {
+                    VirtualFile file = files[i];
+                    items[i] = new JFlexGenerationItem(context.getModuleByFile(file), file);
+                }
+                return items;
+            }
+            return EMPTY_GENERATION_ITEM_ARRAY;
         }
     }
 }

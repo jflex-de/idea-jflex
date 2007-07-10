@@ -1,11 +1,15 @@
 package org.intellij.lang.jflex;
 
+import com.intellij.openapi.application.Application;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.StreamUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import org.intellij.lang.jflex.options.JFlexConfigurable;
 import org.intellij.lang.jflex.options.JFlexSettings;
 import org.intellij.lang.jflex.util.JFlexBundle;
 import org.jetbrains.annotations.NonNls;
@@ -103,22 +107,30 @@ public class JFlex {
                     if (!StringUtil.isEmptyOrSpaces(settings.SKELETON_PATH) && settings.COMMAND_LINE_OPTIONS.indexOf(OPTION_SKEL) == -1) {
                         File skel = new File(settings.SKELETON_PATH);
                         if (!skel.isFile() || !skel.exists()) {
-                            Messages.showWarningDialog(project, JFlexBundle.message("jflex.skeleton.file.was.not.found"), JFlexBundle.message("jflex"));
-                            return false;
+                            return showWarningMessageAndConfigure(project, JFlexBundle.message("jflex.skeleton.file.was.not.found"));
                         }
                     }
                 } else {
-                    Messages.showWarningDialog(project, JFlexBundle.message("jflex.home.path.is.invalid"), JFlexBundle.message("jflex"));
-                    return false;
+                    return showWarningMessageAndConfigure(project, JFlexBundle.message("jflex.home.path.is.invalid"));
                 }
             } else {
-                Messages.showWarningDialog(project, JFlexBundle.message("jflex.home.path.is.invalid"), JFlexBundle.message("jflex"));
-                return false;
+                return showWarningMessageAndConfigure(project, JFlexBundle.message("jflex.home.path.is.invalid"));
             }
         } else {
-            Messages.showWarningDialog(project, JFlexBundle.message("jflex.home.path.is.invalid"), JFlexBundle.message("jflex"));
-            return false;
+            return showWarningMessageAndConfigure(project, JFlexBundle.message("jflex.home.path.is.invalid"));
         }
         return true;
+    }
+
+    private static boolean showWarningMessageAndConfigure(final Project project, String message) {
+        Messages.showWarningDialog(project, message, JFlexBundle.message("jflex"));
+        // Show settings
+        final Application application = ApplicationManager.getApplication();
+        application.invokeLater(new Runnable() {
+            public void run() {
+                ShowSettingsUtil.getInstance().editConfigurable(project, application.getComponent(JFlexConfigurable.class));
+            }
+        });
+        return false;
     }
 }
