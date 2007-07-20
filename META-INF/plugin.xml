@@ -3,7 +3,7 @@
     <vendor>Alexey Efimov</vendor>
 
     <name>JFlex Support</name>
-    <version>1.1</version>
+    <version>1.1.1</version>
 
     <description>Enables JFlex support in IntelliJ IDEA.</description>
     <resource-bundle>org.intellij.lang.jflex.util.JFlexBundle</resource-bundle>

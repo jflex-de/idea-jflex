@@ -12,12 +12,10 @@ import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
-import org.intellij.lang.jflex.JFlex;
 import org.intellij.lang.jflex.JFlexElementTypes;
 import org.intellij.lang.jflex.fileTypes.JFlexFileTypeManager;
 import org.intellij.lang.jflex.psi.JFlexClassStatement;
@@ -33,6 +31,7 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The source generating compiler for *.flex files.
@@ -235,22 +234,16 @@ public class JFlexSourceGeneratingCompiler implements SourceGeneratingCompiler, 
                     VirtualFile file = flexItem.getFile();
                     if (file != null && file.isValid()) {
                         try {
-                            String[] strings = JFlex.exec(file);
-                            String err = strings.length > 1 ? strings[1] : "";
-                            if (StringUtil.isEmptyOrSpaces(err)) {
+                            Map<CompilerMessageCategory, List<JFlexMessage>> messages = JFlex.compile(file);
+                            addMessages(file, messages);
+                            if (messages.get(CompilerMessageCategory.ERROR).isEmpty()) {
                                 File outFile = flexItem.getGeneratedFile();
-                                if (outFile.isFile() && outFile.exists() && outFile.lastModified() > file.getTimeStamp()) {
+                                if (outFile.isFile() && outFile.exists()) {
                                     flexItem.setPath(FileUtil.getRelativePath(outputDir, outFile));
                                     results.add(flexItem);
-                                    String out = strings[0];
-                                    if (!StringUtil.isEmptyOrSpaces(out)) {
-                                        context.addMessage(CompilerMessageCategory.INFORMATION, out.trim(), file.getUrl(), -1, -1);
-                                    }
                                 } else {
                                     context.addMessage(CompilerMessageCategory.ERROR, JFlexBundle.message("file.not.generated"), file.getUrl(), -1, -1);
                                 }
-                            } else {
-                                context.addMessage(CompilerMessageCategory.ERROR, err.trim(), file.getUrl(), -1, -1);
                             }
                         } catch (IOException e) {
                             context.addMessage(CompilerMessageCategory.ERROR, e.getMessage(), file.getUrl(), -1, -1);
@@ -259,6 +252,15 @@ public class JFlexSourceGeneratingCompiler implements SourceGeneratingCompiler, 
                 }
             }
             return results.toArray(new GenerationItem[results.size()]);
+        }
+
+        private void addMessages(VirtualFile file, Map<CompilerMessageCategory, List<JFlexMessage>> messages) {
+            for (CompilerMessageCategory category : messages.keySet()) {
+                List<JFlexMessage> messageList = messages.get(category);
+                for (JFlexMessage message : messageList) {
+                    context.addMessage(category, message.getMessage(), file.getUrl(), message.getLine(), message.getColumn());
+                }
+            }
         }
     }
 }
