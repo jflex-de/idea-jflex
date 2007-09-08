@@ -19,13 +19,13 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.text.MessageFormat;
 
 /**
  * JFlexx wrapper to command line tool.
@@ -62,7 +62,7 @@ public final class JFlex {
     @NotNull
     public static Map<CompilerMessageCategory, List<JFlexMessage>> compile(VirtualFile file) throws IOException {
         JFlexSettings settings = JFlexSettings.getInstance();
-        StringBuffer command = new StringBuffer(SystemInfo.isWindows ? SystemInfo.isWindows9x ? COMMAND_COM : CMD_EXE : "");
+        StringBuilder command = new StringBuilder(SystemInfo.isWindows ? SystemInfo.isWindows9x ? COMMAND_COM : CMD_EXE : "");
         command.append(SystemInfo.isWindows ? JFLEX_BAT : JFLEX_SH);
         String options = MessageFormat.format(" {0} ", settings.COMMAND_LINE_OPTIONS);
         if (!StringUtil.isEmptyOrSpaces(options)) {

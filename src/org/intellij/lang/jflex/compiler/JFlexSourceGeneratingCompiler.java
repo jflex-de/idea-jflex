@@ -116,7 +116,7 @@ public class JFlexSourceGeneratingCompiler implements SourceGeneratingCompiler, 
     }
 
     public ValidityState createValidityState(DataInputStream is) throws IOException {
-        return null;
+        return TimestampValidityState.load(is);
     }
 
     private static class JFlexGenerationItem implements GenerationItem {
@@ -202,7 +202,7 @@ public class JFlexSourceGeneratingCompiler implements SourceGeneratingCompiler, 
                     JFlexGenerationItem generationItem = new JFlexGenerationItem(context.getModuleByFile(file), file, fileIndex.isInTestSourceContent(file));
                     if (context.isMake()) {
                         File generatedFile = generationItem.getGeneratedFile();
-                        if (!generatedFile.exists() || generatedFile.lastModified() <= file.getTimeStamp()) {
+                        if (!generatedFile.exists() || generatedFile.lastModified() <= file.getModificationStamp()) {
                             items.add(generationItem);
                         }
                     } else {
