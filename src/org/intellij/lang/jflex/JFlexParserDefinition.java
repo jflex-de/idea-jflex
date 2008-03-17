@@ -14,9 +14,7 @@ import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import org.intellij.lang.jflex.lexer.JFlexParsingLexer;
 import org.intellij.lang.jflex.parser.JFlexParser;
-import org.intellij.lang.jflex.psi.JFlexPsiFile;
-import org.intellij.lang.jflex.psi.impl.JFlexClassStatementImpl;
-import org.intellij.lang.jflex.psi.impl.JFlexExpressionImpl;
+import org.intellij.lang.jflex.psi.impl.*;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -27,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 public class JFlexParserDefinition implements ParserDefinition {
     @NotNull
     public Lexer createLexer(Project project) {
-        return new JFlexParsingLexer(project);
+        return new JFlexParsingLexer();
     }
 
     public PsiParser createParser(Project project) {
@@ -53,12 +51,16 @@ public class JFlexParserDefinition implements ParserDefinition {
         IElementType type = node.getElementType();
         if (type == JFlexElementTypes.CLASS_STATEMENT) {
             return new JFlexClassStatementImpl(node);
+        } else if (type == JFlexElementTypes.TYPE_STATEMENT) {
+            return new JFlexTypeStatementImpl(node);
+        } else if (type == JFlexElementTypes.JAVA_CODE) {
+            return new JFlexJavaCodeImpl(node);
         }
         return new JFlexExpressionImpl(node);
     }
 
     public PsiFile createFile(FileViewProvider viewProvider) {
-        return new JFlexPsiFile(viewProvider);
+        return new JFlexPsiFileImpl(viewProvider);
     }
 
     public SpaceRequirements spaceExistanceTypeBetweenTokens(ASTNode left, ASTNode right) {

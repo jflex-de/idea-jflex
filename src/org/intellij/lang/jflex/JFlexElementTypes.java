@@ -235,4 +235,5 @@ public interface JFlexElementTypes {
             OPTION_PARAMETER
     );
     IElementType CLASS_STATEMENT = new JFlexElementType("CLASS_STATEMENT");
+    IElementType TYPE_STATEMENT = new JFlexElementType("TYPE_STATEMENT");
 }

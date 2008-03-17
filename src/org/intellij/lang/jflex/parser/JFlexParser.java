@@ -37,8 +37,28 @@ public class JFlexParser implements PsiParser {
         if (first == JFlexElementTypes.CLASS_KEYWORD) {
             parseClassStatement(builder);
             return;
+        } else if (first == JFlexElementTypes.TYPE_KEYWORD) {
+            parseTypeStatement(builder);
+            return;
+        } else if (first == JFlexElementTypes.JAVA_CODE) {
+            parseJavaCode(builder);
+            return;
         }
         builder.advanceLexer();
+    }
+
+    private void parseTypeStatement(PsiBuilder builder) {
+        LOG.assertTrue(builder.getTokenType() == JFlexElementTypes.TYPE_KEYWORD);
+        PsiBuilder.Marker marker = builder.mark();
+        builder.advanceLexer();
+        parseOptionParamExpression(builder);
+        marker.done(JFlexElementTypes.TYPE_STATEMENT);
+    }
+
+    private void parseJavaCode(PsiBuilder builder) {
+        PsiBuilder.Marker marker = builder.mark();
+        builder.advanceLexer();
+        marker.done(JFlexElementTypes.JAVA_CODE);
     }
 
     private void parseClassStatement(PsiBuilder builder) {

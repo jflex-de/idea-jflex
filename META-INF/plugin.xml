@@ -8,7 +8,7 @@
     <description>Enables JFlex support in IntelliJ IDEA.</description>
     <resource-bundle>org.intellij.lang.jflex.util.JFlexBundle</resource-bundle>
 
-    <idea-version since-build="7051"/>
+    <idea-version since-build="7757"/>
 
     <extensions xmlns="com.intellij">
         <applicationConfigurable implementation="org.intellij.lang.jflex.options.JFlexConfigurable"/>
@@ -27,6 +27,9 @@
     <project-components>
         <component>
             <implementation-class>org.intellij.lang.jflex.compiler.JFlexSourceGeneratingCompiler</implementation-class>
+        </component>
+        <component>
+            <implementation-class>org.intellij.lang.jflex.injection.JFlexJavaInjectionComponent</implementation-class>
         </component>
     </project-components>
 </idea-plugin>

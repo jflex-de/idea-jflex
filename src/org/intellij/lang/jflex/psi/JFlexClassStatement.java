@@ -5,6 +5,5 @@ package org.intellij.lang.jflex.psi;
  *
  * @author Alexey Efimov
  */
-public interface JFlexClassStatement extends JFlexStatement {
-    JFlexExpression getExpression();
+public interface JFlexClassStatement extends JFlexOptionStatement {
 }

@@ -3,10 +3,9 @@ package org.intellij.lang.jflex.psi.impl;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.Language;
-import com.intellij.psi.PsiElementVisitor;
 import org.intellij.lang.jflex.fileTypes.JFlexFileTypeManager;
 import org.intellij.lang.jflex.psi.JFlexElement;
-import org.intellij.lang.jflex.psi.JFlexElementVisitor;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -15,6 +14,10 @@ import org.jetbrains.annotations.NotNull;
  * @author Alexey Efimov
  */
 public class JFlexElementImpl extends ASTWrapperPsiElement implements JFlexElement {
+
+    @NonNls
+    private static final String IMPL = "Impl";
+
     public JFlexElementImpl(@NotNull ASTNode node) {
         super(node);
     }
@@ -24,11 +27,13 @@ public class JFlexElementImpl extends ASTWrapperPsiElement implements JFlexEleme
         return JFlexFileTypeManager.getInstance().getFileType().getLanguage();
     }
 
-    public void accept(@NotNull PsiElementVisitor visitor) {
-        if (visitor instanceof JFlexElementVisitor) {
-            ((JFlexElementVisitor) visitor).visitJFlexElement(this);
-        } else {
-            super.accept(visitor);
+    public String toString() {
+        String classname = getClass().getName();
+        if (classname.endsWith(IMPL)) {
+            classname = classname.substring(0, classname.length() - IMPL.length());
         }
+
+        classname = classname.substring(classname.lastIndexOf(".") + 1);
+        return classname;
     }
 }

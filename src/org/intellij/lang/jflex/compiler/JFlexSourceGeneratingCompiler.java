@@ -140,7 +140,7 @@ public class JFlexSourceGeneratingCompiler implements SourceGeneratingCompiler, 
                     ASTNode classStatement = node.findChildByType(JFlexElementTypes.CLASS_STATEMENT);
                     if (classStatement != null) {
                         JFlexClassStatement psiClassStatement = (JFlexClassStatement) classStatement.getPsi();
-                        JFlexExpression generateName = psiClassStatement.getExpression();
+                        JFlexExpression generateName = psiClassStatement.getValue();
                         if (generateName != null) {
                             generationName = generateName.getText();
                         }

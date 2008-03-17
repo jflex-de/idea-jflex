@@ -27,7 +27,8 @@ public final class JFlexSyntaxHighlighter extends SyntaxHighlighterBase {
     private final Map<IElementType, TextAttributesKey> backgrounds = new HashMap<IElementType, TextAttributesKey>();
 
     public JFlexSyntaxHighlighter(Project project, VirtualFile virtualFile) {
-        lexer = new JFlexHighlighterLexer(project, virtualFile);
+
+        lexer = new JFlexHighlighterLexer();
 
         fillMap(colors, JFlexElementTypes.BRACES, JFlexHighlighterColors.BRACES);
         fillMap(colors, JFlexElementTypes.BRACKETS, JFlexHighlighterColors.BRACKETS);
