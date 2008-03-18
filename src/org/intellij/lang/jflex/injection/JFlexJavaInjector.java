@@ -31,27 +31,42 @@ public class JFlexJavaInjector implements LanguageInjector {
                 return;
             }
 
-            StringBuilder imports = new StringBuilder();
+            StringBuilder prefix = new StringBuilder();
 
             //let's add some imports and package statements from flex file header
             if (importSection instanceof JFlexJavaCode) {
-                imports.append(importSection.getText());
+                prefix.append(importSection.getText());
             }
 
+            JFlexPsiFile jfpf = ((JFlexPsiFile) file);
+
             String classnamestr = DEFCLASS;
-            String returntypestr = DEFTYPE;
-
-            JFlexElement classname = ((JFlexPsiFile) file).getClassname();
-            JFlexElement returntype = ((JFlexPsiFile) file).getReturnType();
-
+            JFlexElement classname = jfpf.getClassname();
             if (classname != null) {
                 classnamestr = classname.getText();
             }
+
+            String returntypestr = DEFTYPE;
+            JFlexElement returntype = jfpf.getReturnType();
             if (returntype != null) {
                 returntypestr = returntype.getText();
             }
 
-            imports.append(" public class ").append(classnamestr).append("{");
+            StringBuilder implementedstr = new StringBuilder();
+            JFlexElement[] implemented = jfpf.getImplementedInterfaces();
+            //what a lousy piece of code.
+            if (implemented.length > 0) {
+                implementedstr.append(" implements ");
+                for (int i = 0; i < implemented.length; i++) {
+                    JFlexElement jFlexElement = implemented[i];
+                    implementedstr.append(jFlexElement.getText());
+                    if (i < implemented.length - 1) {
+                        implementedstr.append(",");
+                    }
+                }
+            }
+
+            prefix.append("\npublic class ").append(classnamestr).append(implementedstr.toString()).append("{");
 
             StringBuilder suffix = new StringBuilder();
 
@@ -59,11 +74,11 @@ public class JFlexJavaInjector implements LanguageInjector {
             if (host.getPrevSibling().getNode().getElementType() == JFlexElementTypes.OPTION_LEFT_BRACE) {
                 suffix.append("}");
             } else {
-                imports.append("public ").append(returntypestr).append(" yylex(){");
+                prefix.append("public ").append(returntypestr).append(" yylex(){");
                 suffix.append("}}");
             }
 
-            registrar.addPlace(StdLanguages.JAVA, new TextRange(0, host.getTextLength()), imports.toString(), suffix.toString());
+            registrar.addPlace(StdLanguages.JAVA, new TextRange(0, host.getTextLength()), prefix.toString(), suffix.toString());
 
         }
 

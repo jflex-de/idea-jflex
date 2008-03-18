@@ -236,4 +236,5 @@ public interface JFlexElementTypes {
     );
     IElementType CLASS_STATEMENT = new JFlexElementType("CLASS_STATEMENT");
     IElementType TYPE_STATEMENT = new JFlexElementType("TYPE_STATEMENT");
+    IElementType IMPLEMENTS_STATEMENT = new JFlexElementType("IMPLEMENTS_STATEMENT");
 }

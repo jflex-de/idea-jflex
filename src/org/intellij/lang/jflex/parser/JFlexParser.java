@@ -37,6 +37,9 @@ public class JFlexParser implements PsiParser {
         if (first == JFlexElementTypes.CLASS_KEYWORD) {
             parseClassStatement(builder);
             return;
+        } else if (first == JFlexElementTypes.IMPLEMENTS_KEYWORD) {
+            parseImplementsStatement(builder);
+            return;
         } else if (first == JFlexElementTypes.TYPE_KEYWORD) {
             parseTypeStatement(builder);
             return;
@@ -45,6 +48,41 @@ public class JFlexParser implements PsiParser {
             return;
         }
         builder.advanceLexer();
+    }
+
+    private void parseImplementsStatement(PsiBuilder builder) {
+        LOG.assertTrue(builder.getTokenType() == JFlexElementTypes.IMPLEMENTS_KEYWORD);
+
+        PsiBuilder.Marker interfacesMarker = builder.mark();
+        builder.advanceLexer();
+
+        boolean first = true;
+        while (builder.getTokenType() == JFlexElementTypes.OPTION_PARAMETER || builder.getTokenType() == JFlexElementTypes.OPTION_COMMA) {
+
+            if (first) {
+                first = false;
+            } else {
+                //parsing commas or go to next expr
+                if (builder.getTokenType() == JFlexElementTypes.OPTION_COMMA) {
+                    builder.advanceLexer();
+                } else {
+                    builder.error("Expecting comma");
+                    continue;
+                }
+            }
+
+            PsiBuilder.Marker interfaceMarker = builder.mark();
+            if (builder.getTokenType() == JFlexElementTypes.OPTION_PARAMETER) {
+                builder.advanceLexer();
+                interfaceMarker.done(JFlexElementTypes.OPTION_PARAMETER);
+            } else {
+                builder.error("Expected expression");
+                interfaceMarker.drop();
+                break;
+            }
+        }
+
+        interfacesMarker.done(JFlexElementTypes.IMPLEMENTS_STATEMENT);
     }
 
     private void parseTypeStatement(PsiBuilder builder) {

@@ -31,11 +31,20 @@ public class JFlexPsiFileImpl extends PsiFileBase implements JFlexPsiFile {
 
     public JFlexElement getReturnType() {
         JFlexExpression classexp = null;
-        ASTNode classnode = getNode().findChildByType(JFlexElementTypes.TYPE_STATEMENT);
-        if (classnode != null) {
-            classexp = ((JFlexTypeStatement) classnode.getPsi()).getValue();
+        ASTNode returnnode = getNode().findChildByType(JFlexElementTypes.TYPE_STATEMENT);
+        if (returnnode != null) {
+            classexp = ((JFlexTypeStatement) returnnode.getPsi()).getValue();
         }
         return classexp;
+    }
+
+    public JFlexElement[] getImplementedInterfaces() {
+        JFlexElement[] result = new JFlexElement[0];
+        ASTNode implmentsnode = getNode().findChildByType(JFlexElementTypes.IMPLEMENTS_STATEMENT);
+        if (implmentsnode != null) {
+            result = ((JFlexImplementsStatement) implmentsnode.getPsi()).getInterfaces();
+        }
+        return result;
     }
 
     @NotNull
