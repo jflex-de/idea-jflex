@@ -12,7 +12,9 @@ public interface JFlexPsiFile extends JFlexElement {
 
     JFlexElement getReturnType();
 
-    JFlexElement[] getImplementedInterfaces();
+    JFlexExpression[] getImplementedInterfaces();
+
+    JFlexMacroDefinition[] getDeclaredMacroses();
 
 
 }

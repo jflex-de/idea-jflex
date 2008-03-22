@@ -12,10 +12,12 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Parser.
  *
- * @author Alexey Efimov
+ * @author Alexey Efimov, Max Ishchenko
  */
 public class JFlexParser implements PsiParser {
+
     private static final Logger LOG = Logger.getInstance("#JFlexParser");
+
     private final Project project;
 
     public JFlexParser(Project project) {
@@ -24,36 +26,77 @@ public class JFlexParser implements PsiParser {
 
     @NotNull
     public ASTNode parse(IElementType root, PsiBuilder builder) {
+
         final PsiBuilder.Marker rootMarker = builder.mark();
+
         while (!builder.eof()) {
             parse(builder);
         }
         rootMarker.done(root);
+
         return builder.getTreeBuilt();
+
     }
 
     private void parse(PsiBuilder builder) {
         IElementType first = builder.getTokenType();
-        if (first == JFlexElementTypes.CLASS_KEYWORD) {
+        if (first == JFlexElementTypes.MACROS) {
+            parseMacroDefinition(builder);
+        } else if (first == JFlexElementTypes.CLASS_KEYWORD) {
             parseClassStatement(builder);
-            return;
         } else if (first == JFlexElementTypes.IMPLEMENTS_KEYWORD) {
             parseImplementsStatement(builder);
-            return;
         } else if (first == JFlexElementTypes.TYPE_KEYWORD) {
             parseTypeStatement(builder);
-            return;
         } else if (first == JFlexElementTypes.JAVA_CODE) {
             parseJavaCode(builder);
-            return;
+        } else if (first == JFlexElementTypes.REGEXP_MACROS_REF) {
+            parseMacroReference(builder);
+        } else {
+            builder.advanceLexer();
         }
+    }
+
+    private void parseMacroDefinition(PsiBuilder builder) {
+
+        PsiBuilder.Marker macroDefinition = builder.mark();
         builder.advanceLexer();
+
+        if (builder.getTokenType() != JFlexElementTypes.EQ) {
+            builder.error(" \"=\" expected");
+        } else {
+            builder.advanceLexer();
+        }
+
+        int found = 0;
+        PsiBuilder.Marker macrovalue = builder.mark();
+
+        while (JFlexElementTypes.REGEXP_SCOPE.contains(builder.getTokenType())) {
+            found++;
+            builder.advanceLexer();
+        }
+
+        if (found == 0) {
+            macrovalue.drop();
+            builder.error("Macro value expected");
+        } else {
+            macrovalue.done(JFlexElementTypes.REGEXP);
+        }
+
+        macroDefinition.done(JFlexElementTypes.MACRO_DEFINITION);
+
+    }
+
+    private void parseMacroReference(PsiBuilder builder) {
+        PsiBuilder.Marker macroMarker = builder.mark();
+        builder.advanceLexer();
+        macroMarker.done(JFlexElementTypes.REGEXP_MACROS_REF);
     }
 
     private void parseImplementsStatement(PsiBuilder builder) {
         LOG.assertTrue(builder.getTokenType() == JFlexElementTypes.IMPLEMENTS_KEYWORD);
 
-        PsiBuilder.Marker interfacesMarker = builder.mark();
+        PsiBuilder.Marker interfacesStatementMarker = builder.mark();
         builder.advanceLexer();
 
         boolean first = true;
@@ -82,7 +125,7 @@ public class JFlexParser implements PsiParser {
             }
         }
 
-        interfacesMarker.done(JFlexElementTypes.IMPLEMENTS_STATEMENT);
+        interfacesStatementMarker.done(JFlexElementTypes.IMPLEMENTS_STATEMENT);
     }
 
     private void parseTypeStatement(PsiBuilder builder) {

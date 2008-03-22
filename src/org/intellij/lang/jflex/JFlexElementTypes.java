@@ -234,7 +234,17 @@ public interface JFlexElementTypes {
     TokenSet EXPRESSIONS = TokenSet.create(
             OPTION_PARAMETER
     );
+
+
+    /**
+     * Composite elements
+     */
+
+    IElementType SECTION = new JFlexElementType("SECTION");
     IElementType CLASS_STATEMENT = new JFlexElementType("CLASS_STATEMENT");
     IElementType TYPE_STATEMENT = new JFlexElementType("TYPE_STATEMENT");
     IElementType IMPLEMENTS_STATEMENT = new JFlexElementType("IMPLEMENTS_STATEMENT");
+    IElementType MACRO_DEFINITION = new JFlexElementType("MACRO_DEFINITION");
+    IElementType REGEXP = new JFlexElementType("REGEXP");
+
 }

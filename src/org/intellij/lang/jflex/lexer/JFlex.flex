@@ -270,3 +270,6 @@ RegExpPostfix = [\*\+\?]
     "}"                        { braceCounter--; if (braceCounter < 0) {yybegin(RULE); return JFlexElementTypes.RIGHT_BRACE; } else { yybegin(ACTION_JAVA_CODE); return JFlexElementTypes.JAVA_CODE; }}
     .                          { yybegin(ACTION_JAVA_CODE); return JFlexElementTypes.JAVA_CODE; }
 }
+
+//todo: remove from here
+{LineTerminator}+ { return JFlexElementTypes.WHITE_SPACE; }
