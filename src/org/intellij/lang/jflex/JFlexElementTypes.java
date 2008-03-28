@@ -244,6 +244,8 @@ public interface JFlexElementTypes {
     IElementType CLASS_STATEMENT = new JFlexElementType("CLASS_STATEMENT");
     IElementType TYPE_STATEMENT = new JFlexElementType("TYPE_STATEMENT");
     IElementType IMPLEMENTS_STATEMENT = new JFlexElementType("IMPLEMENTS_STATEMENT");
+    IElementType STATE_STATEMENT = new JFlexElementType("STATE_STATEMENT");
+    IElementType STATE_DEFINITION = new JFlexElementType("STATE_DEFINITION");
     IElementType MACRO_DEFINITION = new JFlexElementType("MACRO_DEFINITION");
     IElementType REGEXP = new JFlexElementType("REGEXP");
 

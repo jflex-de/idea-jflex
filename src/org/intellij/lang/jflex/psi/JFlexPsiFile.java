@@ -1,5 +1,7 @@
 package org.intellij.lang.jflex.psi;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Created by IntelliJ IDEA.
  * User: Max
@@ -8,13 +10,20 @@ package org.intellij.lang.jflex.psi;
  */
 public interface JFlexPsiFile extends JFlexElement {
 
+    @Nullable
     JFlexElement getClassname();
 
+    @Nullable
     JFlexElement getReturnType();
 
     JFlexExpression[] getImplementedInterfaces();
 
     JFlexMacroDefinition[] getDeclaredMacroses();
+
+    JFlexStateStatement[] getStateStatements();
+
+    @Nullable
+    JFlexJavaCode getImports();
 
 
 }

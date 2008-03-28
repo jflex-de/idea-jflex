@@ -6,6 +6,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.LiteralTextEscaper;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
+import org.intellij.lang.jflex.JFlexElementTypes;
 import org.intellij.lang.jflex.injection.EmbeddedJavaLiteralTextEscaper;
 import org.intellij.lang.jflex.psi.JFlexJavaCode;
 import org.jetbrains.annotations.NotNull;
@@ -23,6 +24,11 @@ public class JFlexJavaCodeImpl extends JFlexElementImpl implements JFlexJavaCode
 
     public JFlexJavaCodeImpl(@NotNull ASTNode node) {
         super(node);
+    }
+
+    public boolean isMatchAction() {
+        ASTNode prev = getNode().getTreePrev();
+        return prev != null && prev.getElementType() == JFlexElementTypes.LEFT_BRACE;
     }
 
     @Nullable

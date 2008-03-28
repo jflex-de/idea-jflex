@@ -2,8 +2,10 @@ package org.intellij.lang.jflex.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.*;
-import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiNamedElement;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Query;
@@ -76,10 +78,6 @@ public class JFlexMacroReferenceImpl extends JFlexElementImpl implements JFlexMa
     public Object[] getVariants() {
         Query query = ReferencesSearch.search(this);
         return query.findAll().toArray();
-    }
-
-    public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull PsiSubstitutor substitutor, PsiElement lastParent, @NotNull PsiElement place) {
-        return super.processDeclarations(processor, substitutor, lastParent, place);
     }
 
     public boolean isSoft() {

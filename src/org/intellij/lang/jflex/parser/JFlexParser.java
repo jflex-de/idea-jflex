@@ -44,6 +44,12 @@ public class JFlexParser implements PsiParser {
             parseMacroDefinition(builder);
         } else if (first == JFlexElementTypes.CLASS_KEYWORD) {
             parseClassStatement(builder);
+        } else if (first == JFlexElementTypes.STATE_KEYWORD) {
+            parseStateStatement(builder);
+        } else if (first == JFlexElementTypes.XSTATE_KEYWORD) {
+            parseXstateStatement(builder);
+        } else if (first == JFlexElementTypes.STATE_REF) {
+            parseStateReference(builder);
         } else if (first == JFlexElementTypes.IMPLEMENTS_KEYWORD) {
             parseImplementsStatement(builder);
         } else if (first == JFlexElementTypes.TYPE_KEYWORD) {
@@ -55,6 +61,61 @@ public class JFlexParser implements PsiParser {
         } else {
             builder.advanceLexer();
         }
+    }
+
+    private void parseStateReference(PsiBuilder builder) {
+        PsiBuilder.Marker mark = builder.mark();
+        builder.advanceLexer();
+        mark.done(JFlexElementTypes.STATE_REF);
+    }
+
+    private void parseCommaSeparatedOptionStatement(PsiBuilder builder, IElementType finishWith) {
+        parseCommaSeparatedOptionStatement(builder, finishWith, JFlexElementTypes.OPTION_PARAMETER);
+    }
+
+    private void parseCommaSeparatedOptionStatement(PsiBuilder builder, IElementType finishWith, IElementType markWith) {
+
+        PsiBuilder.Marker stateMarker = builder.mark();
+        builder.advanceLexer();
+
+        boolean first = true;
+
+        while (builder.getTokenType() == JFlexElementTypes.OPTION_PARAMETER || builder.getTokenType() == JFlexElementTypes.OPTION_COMMA) {
+
+            if (first) {
+                first = false;
+            } else {
+                //parsing commas or go to next expr
+                if (builder.getTokenType() == JFlexElementTypes.OPTION_COMMA) {
+                    builder.advanceLexer();
+                } else {
+                    builder.error("Comma expected");
+                    continue;
+                }
+            }
+
+            PsiBuilder.Marker interfaceMarker = builder.mark();
+            if (builder.getTokenType() == JFlexElementTypes.OPTION_PARAMETER) {
+                builder.advanceLexer();
+                interfaceMarker.done(markWith);
+            } else {
+                builder.error("Expression expected");
+                interfaceMarker.drop();
+                break;
+            }
+        }
+
+        stateMarker.done(finishWith);
+
+    }
+
+    private void parseStateStatement(PsiBuilder builder) {
+        parseCommaSeparatedOptionStatement(builder, JFlexElementTypes.STATE_STATEMENT, JFlexElementTypes.STATE_DEFINITION);
+
+    }
+
+    private void parseXstateStatement(PsiBuilder builder) {
+        parseCommaSeparatedOptionStatement(builder, JFlexElementTypes.STATE_STATEMENT, JFlexElementTypes.STATE_DEFINITION);
     }
 
     private void parseMacroDefinition(PsiBuilder builder) {
@@ -94,38 +155,7 @@ public class JFlexParser implements PsiParser {
     }
 
     private void parseImplementsStatement(PsiBuilder builder) {
-        LOG.assertTrue(builder.getTokenType() == JFlexElementTypes.IMPLEMENTS_KEYWORD);
-
-        PsiBuilder.Marker interfacesStatementMarker = builder.mark();
-        builder.advanceLexer();
-
-        boolean first = true;
-        while (builder.getTokenType() == JFlexElementTypes.OPTION_PARAMETER || builder.getTokenType() == JFlexElementTypes.OPTION_COMMA) {
-
-            if (first) {
-                first = false;
-            } else {
-                //parsing commas or go to next expr
-                if (builder.getTokenType() == JFlexElementTypes.OPTION_COMMA) {
-                    builder.advanceLexer();
-                } else {
-                    builder.error("Expecting comma");
-                    continue;
-                }
-            }
-
-            PsiBuilder.Marker interfaceMarker = builder.mark();
-            if (builder.getTokenType() == JFlexElementTypes.OPTION_PARAMETER) {
-                builder.advanceLexer();
-                interfaceMarker.done(JFlexElementTypes.OPTION_PARAMETER);
-            } else {
-                builder.error("Expected expression");
-                interfaceMarker.drop();
-                break;
-            }
-        }
-
-        interfacesStatementMarker.done(JFlexElementTypes.IMPLEMENTS_STATEMENT);
+        parseCommaSeparatedOptionStatement(builder, JFlexElementTypes.IMPLEMENTS_STATEMENT);
     }
 
     private void parseTypeStatement(PsiBuilder builder) {

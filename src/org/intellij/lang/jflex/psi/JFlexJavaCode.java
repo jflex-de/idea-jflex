@@ -9,4 +9,7 @@ import com.intellij.psi.PsiLanguageInjectionHost;
  * Time: 18:52:38
  */
 public interface JFlexJavaCode extends JFlexElement, PsiLanguageInjectionHost {
+
+    public boolean isMatchAction();
+
 }

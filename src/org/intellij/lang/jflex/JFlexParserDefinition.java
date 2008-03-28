@@ -51,6 +51,12 @@ public class JFlexParserDefinition implements ParserDefinition {
         IElementType type = node.getElementType();
         if (type == JFlexElementTypes.CLASS_STATEMENT) {
             return new JFlexClassStatementImpl(node);
+        } else if (type == JFlexElementTypes.STATE_STATEMENT) {
+            return new JFlexStateStatementImpl(node);
+        } else if (type == JFlexElementTypes.STATE_DEFINITION) {
+            return new JFlexStateDefinitionImpl(node);
+        } else if (type == JFlexElementTypes.STATE_REF) {
+            return new JFlexStateReferenceImpl(node);
         } else if (type == JFlexElementTypes.MACRO_DEFINITION) {
             return new JFlexMacroDefinitionImpl(node);
         } else if (type == JFlexElementTypes.IMPLEMENTS_STATEMENT) {

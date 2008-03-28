@@ -9,6 +9,7 @@ import org.intellij.lang.jflex.JFlexElementTypes;
 import org.intellij.lang.jflex.fileTypes.JFlexFileTypeManager;
 import org.intellij.lang.jflex.psi.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * JFlex PSI file.
@@ -18,11 +19,13 @@ import org.jetbrains.annotations.NotNull;
 public class JFlexPsiFileImpl extends PsiFileBase implements JFlexPsiFile {
 
     public static final TokenSet MACROSET = TokenSet.create(JFlexElementTypes.MACRO_DEFINITION);
+    public static final TokenSet STATESTATEMENTSET = TokenSet.create(JFlexElementTypes.STATE_STATEMENT);
 
     public JFlexPsiFileImpl(FileViewProvider viewProvider) {
         super(viewProvider, JFlexFileTypeManager.getInstance().getFileType().getLanguage());
     }
 
+    @Nullable
     public JFlexElement getClassname() {
         JFlexExpression classexp = null;
         ASTNode classnode = getNode().findChildByType(JFlexElementTypes.CLASS_STATEMENT);
@@ -32,6 +35,7 @@ public class JFlexPsiFileImpl extends PsiFileBase implements JFlexPsiFile {
         return classexp;
     }
 
+    @Nullable
     public JFlexElement getReturnType() {
         JFlexExpression classexp = null;
         ASTNode returnnode = getNode().findChildByType(JFlexElementTypes.TYPE_STATEMENT);
@@ -56,6 +60,21 @@ public class JFlexPsiFileImpl extends PsiFileBase implements JFlexPsiFile {
         int i = 0;
         for (ASTNode node : macroses) {
             result[i++] = (JFlexMacroDefinition) node.getPsi();
+        }
+        return result;
+    }
+
+    @Nullable
+    public JFlexJavaCode getImports() {
+        return getNode().getFirstChildNode().getElementType() == JFlexElementTypes.JAVA_CODE ? (JFlexJavaCode) getNode().getFirstChildNode().getPsi() : null;
+    }
+
+    public JFlexStateStatement[] getStateStatements() {
+        ASTNode[] statestatements = getNode().getChildren(STATESTATEMENTSET);
+        JFlexStateStatement[] result = new JFlexStateStatement[statestatements.length];
+        int i = 0;
+        for (ASTNode node : statestatements) {
+            result[i++] = (JFlexStateStatement) node.getPsi();
         }
         return result;
     }

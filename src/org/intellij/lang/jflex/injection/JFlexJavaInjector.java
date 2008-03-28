@@ -2,8 +2,9 @@ package org.intellij.lang.jflex.injection;
 
 import com.intellij.lang.StdLanguages;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.*;
-import org.intellij.lang.jflex.JFlexElementTypes;
+import com.intellij.psi.InjectedLanguagePlaces;
+import com.intellij.psi.LanguageInjector;
+import com.intellij.psi.PsiLanguageInjectionHost;
 import org.intellij.lang.jflex.psi.JFlexElement;
 import org.intellij.lang.jflex.psi.JFlexJavaCode;
 import org.intellij.lang.jflex.psi.JFlexPsiFile;
@@ -15,17 +16,17 @@ public class JFlexJavaInjector implements LanguageInjector {
     public static final String DEFMETHOD = "yylex";
     public static final String DEFTYPE = "int";
 
-    public void getLanguagesToInject(@NotNull PsiLanguageInjectionHost host, @NotNull InjectedLanguagePlaces registrar) {
+    public void getLanguagesToInject(@NotNull PsiLanguageInjectionHost _host, @NotNull InjectedLanguagePlaces registrar) {
 
-        if (host instanceof JFlexJavaCode) {
+        if (_host instanceof JFlexJavaCode) {
 
-            PsiFile file = host.getContainingFile();
-            assert file instanceof JFlexPsiFile;
+            JFlexJavaCode host = (JFlexJavaCode) _host;
 
-            //todo: that should be done like file.getImportsSection()
-            PsiElement importSection = file.getFirstChild();
+            assert host.getContainingFile() instanceof JFlexPsiFile;
+            JFlexPsiFile file = (JFlexPsiFile) host.getContainingFile();
 
-            //that is processing imports and package section
+            JFlexJavaCode importSection = file.getImports();
+            //processing imports and package section
             if (importSection == host) {
                 registrar.addPlace(StdLanguages.JAVA, new TextRange(0, host.getTextLength()), null, "\npublic class a{}");
                 return;
@@ -34,26 +35,24 @@ public class JFlexJavaInjector implements LanguageInjector {
             StringBuilder prefix = new StringBuilder();
 
             //let's add some imports and package statements from flex file header
-            if (importSection instanceof JFlexJavaCode) {
+            if (importSection != null) {
                 prefix.append(importSection.getText());
             }
 
-            JFlexPsiFile jfpf = ((JFlexPsiFile) file);
-
             String classnamestr = DEFCLASS;
-            JFlexElement classname = jfpf.getClassname();
+            JFlexElement classname = file.getClassname();
             if (classname != null) {
                 classnamestr = classname.getText();
             }
 
             String returntypestr = DEFTYPE;
-            JFlexElement returntype = jfpf.getReturnType();
+            JFlexElement returntype = file.getReturnType();
             if (returntype != null) {
                 returntypestr = returntype.getText();
             }
 
             StringBuilder implementedstr = new StringBuilder();
-            JFlexElement[] implemented = jfpf.getImplementedInterfaces();
+            JFlexElement[] implemented = file.getImplementedInterfaces();
             //what a lousy piece of code.
             if (implemented.length > 0) {
                 implementedstr.append(" implements ");
@@ -70,12 +69,11 @@ public class JFlexJavaInjector implements LanguageInjector {
 
             StringBuilder suffix = new StringBuilder();
 
-            //todo: that should be done the other way.
-            if (host.getPrevSibling().getNode().getElementType() == JFlexElementTypes.OPTION_LEFT_BRACE) {
-                suffix.append("}");
-            } else {
+            if (host.isMatchAction()) {
                 prefix.append("public ").append(returntypestr).append(" yylex(){");
                 suffix.append("}}");
+            } else {
+                suffix.append("}");
             }
 
             registrar.addPlace(StdLanguages.JAVA, new TextRange(0, host.getTextLength()), prefix.toString(), suffix.toString());
