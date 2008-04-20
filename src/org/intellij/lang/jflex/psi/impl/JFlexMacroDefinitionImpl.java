@@ -20,8 +20,17 @@ public class JFlexMacroDefinitionImpl extends JFlexElementImpl implements JFlexM
         super(node);
     }
 
+    public ASTNode findNameElement() {
+        return getNode().findChildByType(JFlexElementTypes.MACROS);
+    }
+
+    public PsiElement getNameElement() {
+        ASTNode node = findNameElement();
+        return node != null ? node.getPsi() : null;
+    }
+
     public String getName() {
-        ASTNode node = getNode().findChildByType(JFlexElementTypes.MACROS);
+        ASTNode node = findNameElement();
         return node != null ? node.getText() : null;
     }
 

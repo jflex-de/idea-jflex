@@ -4,7 +4,6 @@ import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.util.IncorrectOperationException;
@@ -48,15 +47,19 @@ public class JFlexMacroReferenceImpl extends JFlexElementImpl implements JFlexMa
 
     @Nullable
     public PsiElement resolve() {
-        //that's not right. but it wokrs :) todo: do the right way
+        //Is it the correct way?
         JFlexPsiFile file = (JFlexPsiFile) this.getContainingFile();
-        PsiNamedElement[] macroses = file.getDeclaredMacroses();
-        for (PsiNamedElement m : macroses) {
+        JFlexMacroDefinition[] macroses = file.getDeclaredMacroses();
+        for (JFlexMacroDefinition m : macroses) {
             if (getText().equals(m.getName())) {
                 return m;
             }
         }
         return null;
+    }
+
+    public int getTextOffset() {
+        return super.getTextOffset();
     }
 
     public String getCanonicalText() {
@@ -72,7 +75,7 @@ public class JFlexMacroReferenceImpl extends JFlexElementImpl implements JFlexMa
     }
 
     public boolean isReferenceTo(PsiElement element) {
-        return element instanceof JFlexMacroDefinition && element.getText().equals(getText());
+        return element instanceof JFlexMacroDefinition && ((JFlexMacroDefinition) element).getName().equals(getText());
     }
 
     public Object[] getVariants() {

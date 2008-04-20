@@ -57,7 +57,7 @@ public class JFlexStateReferenceImpl extends JFlexElementImpl implements JFlexSt
     }
 
     public boolean isReferenceTo(PsiElement element) {
-        return element instanceof JFlexStateReference && element.getText().equals(getText());
+        return element instanceof JFlexStateDefinition && ((JFlexStateDefinition) element).getName().equals(getText());
     }
 
 

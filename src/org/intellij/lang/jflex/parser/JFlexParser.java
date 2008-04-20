@@ -90,7 +90,6 @@ public class JFlexParser implements PsiParser {
                     builder.advanceLexer();
                 } else {
                     builder.error("Comma expected");
-                    continue;
                 }
             }
 

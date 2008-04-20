@@ -249,4 +249,7 @@ public interface JFlexElementTypes {
     IElementType MACRO_DEFINITION = new JFlexElementType("MACRO_DEFINITION");
     IElementType REGEXP = new JFlexElementType("REGEXP");
 
+
+    TokenSet IDENTIFIERS = TokenSet.create(STATE_DEFINITION, MACRO_DEFINITION, MACROS_REF, STATE_REF);
+
 }
