@@ -1,14 +1,20 @@
 <!DOCTYPE idea-plugin PUBLIC "Plugin/DTD" "http://plugins.intellij.net/plugin.dtd">
 <idea-plugin>
-    <vendor>Alexey Efimov, Max Ishchenko</vendor>
 
     <name>JFlex Support</name>
+    <description>JFlex The Fast Scanner Generator for Java support.</description>
     <version>1.2.0</version>
+    <vendor>Alexey Efimov, Max Ishchenko</vendor>
+    <change-notes><![CDATA[
+    1.2.0 - Embedded Java code support, "Find Usages" for macroses and states, flex files can be excluded from
+    compile, "File not generated" bug fixed, settings GUI fixed.<br>
+    ]]>
+    </change-notes>
 
     <description>Enables JFlex support in IntelliJ IDEA.</description>
     <resource-bundle>org.intellij.lang.jflex.util.JFlexBundle</resource-bundle>
 
-    <idea-version since-build="7821"/>
+    <idea-version since-build="7757"/>
 
     <extensions xmlns="com.intellij">
         <applicationConfigurable implementation="org.intellij.lang.jflex.options.JFlexConfigurable"/>
