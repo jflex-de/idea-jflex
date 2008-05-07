@@ -12,6 +12,7 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.TextComponentAccessor;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.IdeBorderFactory;
+import com.intellij.ui.StateRestoringCheckBox;
 import com.intellij.ui.TextFieldWithStoredHistory;
 import com.intellij.util.ui.update.ComponentDisposable;
 import org.intellij.lang.jflex.util.JFlexBundle;
@@ -35,11 +36,14 @@ public final class JFlexSettingsForm implements PersistentStateComponent<JFlexSe
     private static final String JFLEX_SKELETON_KEY = "JFlex.Skeleton";
     @NonNls
     private static final String JFLEX_OPTIONS_KEY = "JFlex.Options";
+    @NonNls
+    private static final String JFLEX_EMBEDJAVA_KEY = "JFlex.EmbedJava";
 
     private ComponentWithBrowseButton<TextFieldWithStoredHistory> jFlexHomeTextField;
     private ComponentWithBrowseButton<TextFieldWithStoredHistory> skeletonPathTextField;
     private JPanel formComponent;
     private TextFieldWithStoredHistory commandLineOptionsTextField;
+    private JCheckBox injectJava;
 
     private final JFlexSettings settings = new JFlexSettings();
 
@@ -71,6 +75,7 @@ public final class JFlexSettingsForm implements PersistentStateComponent<JFlexSe
         skeletonPathTextField = new ComponentWithBrowseButton<TextFieldWithStoredHistory>(skeletonPathHistory, null);
         fixButton(skeletonPathHistory, skeletonPathTextField);
         commandLineOptionsTextField = createHistoryTextField(JFLEX_OPTIONS_KEY, JFlexSettings.DEFAULT_OPTIONS_CHARAT_NOBAK);
+        injectJava = new StateRestoringCheckBox(JFLEX_EMBEDJAVA_KEY, true);
     }
 
     private void fixButton(final TextFieldWithStoredHistory historyField, ComponentWithBrowseButton<TextFieldWithStoredHistory> control) {
@@ -114,7 +119,8 @@ public final class JFlexSettingsForm implements PersistentStateComponent<JFlexSe
     public boolean isModified(JFlexSettings state) {
         return !jFlexHomeTextField.getChildComponent().getText().equals(state.JFLEX_HOME) ||
                 !skeletonPathTextField.getChildComponent().getText().equals(state.SKELETON_PATH) ||
-                !commandLineOptionsTextField.getText().equals(state.COMMAND_LINE_OPTIONS);
+                !commandLineOptionsTextField.getText().equals(state.COMMAND_LINE_OPTIONS) ||
+                injectJava.isSelected() != state.EMBEDJAVA;
     }
 
     /**
@@ -159,6 +165,7 @@ public final class JFlexSettingsForm implements PersistentStateComponent<JFlexSe
             settings.JFLEX_HOME = jFlexHomeTextField.getChildComponent().getText();
             settings.SKELETON_PATH = skeletonPathTextField.getChildComponent().getText();
             settings.COMMAND_LINE_OPTIONS = commandLineOptionsTextField.getText();
+            settings.EMBEDJAVA = injectJava.isSelected();
         }
         return settings;
     }
@@ -184,6 +191,7 @@ public final class JFlexSettingsForm implements PersistentStateComponent<JFlexSe
         setTextWithHistory(jFlexHomeTextField.getChildComponent(), state.JFLEX_HOME);
         setTextWithHistory(skeletonPathTextField.getChildComponent(), state.SKELETON_PATH);
         setTextWithHistory(commandLineOptionsTextField, state.COMMAND_LINE_OPTIONS);
+        injectJava.setSelected(state.EMBEDJAVA);
     }
 
     private static void setTextWithHistory(TextFieldWithStoredHistory component, String text) {

@@ -204,7 +204,7 @@ public class JFlexSourceGeneratingCompiler implements SourceGeneratingCompiler, 
                     JFlexGenerationItem generationItem = new JFlexGenerationItem(context.getModuleByFile(file), file, fileIndex.isInTestSourceContent(file));
                     if (context.isMake()) {
                         File generatedFile = generationItem.getGeneratedFile();
-                        if (!generatedFile.exists() || generatedFile.lastModified() <= file.getModificationStamp()) {
+                        if (!generatedFile.exists() || generatedFile.lastModified() <= file.getTimeStamp()) {
                             items.add(generationItem);
                         }
                     } else {

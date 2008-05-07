@@ -5,6 +5,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.InjectedLanguagePlaces;
 import com.intellij.psi.LanguageInjector;
 import com.intellij.psi.PsiLanguageInjectionHost;
+import org.intellij.lang.jflex.options.JFlexSettings;
 import org.intellij.lang.jflex.psi.JFlexElement;
 import org.intellij.lang.jflex.psi.JFlexJavaCode;
 import org.intellij.lang.jflex.psi.JFlexPsiFile;
@@ -16,9 +17,17 @@ public class JFlexJavaInjector implements LanguageInjector {
     public static final String DEFMETHOD = "yylex";
     public static final String DEFTYPE = "int";
 
+    private JFlexSettings settings;
+
+    public JFlexJavaInjector() {
+        settings = JFlexSettings.getInstance();
+    }
+
     public void getLanguagesToInject(@NotNull PsiLanguageInjectionHost _host, @NotNull InjectedLanguagePlaces registrar) {
 
         if (_host instanceof JFlexJavaCode) {
+
+            if (!settings.EMBEDJAVA) return;
 
             JFlexJavaCode host = (JFlexJavaCode) _host;
 

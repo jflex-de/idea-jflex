@@ -34,6 +34,7 @@ public final class JFlexSettings implements PersistentStateComponent<JFlexSettin
     public String JFLEX_HOME = getDefaultJFlexHome();
     public String SKELETON_PATH = getDefaultSkeletonPath(JFLEX_HOME);
     public String COMMAND_LINE_OPTIONS = DEFAULT_OPTIONS_CHARAT_NOBAK;
+    public boolean EMBEDJAVA = true;
 
     public JFlexSettings getState() {
         return this;
