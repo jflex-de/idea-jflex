@@ -1,5 +1,6 @@
 package org.intellij.lang.jflex.compiler;
 
+import com.intellij.compiler.CompilerConfiguration;
 import com.intellij.compiler.impl.CompilerUtil;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.application.Application;
@@ -16,10 +17,8 @@ import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
-import org.intellij.lang.jflex.JFlexElementTypes;
 import org.intellij.lang.jflex.fileTypes.JFlexFileTypeManager;
-import org.intellij.lang.jflex.psi.JFlexClassStatement;
-import org.intellij.lang.jflex.psi.JFlexExpression;
+import org.intellij.lang.jflex.psi.JFlexElement;
 import org.intellij.lang.jflex.psi.JFlexPsiFile;
 import org.intellij.lang.jflex.util.JFlexBundle;
 import org.jetbrains.annotations.NonNls;
@@ -137,13 +136,12 @@ public class JFlexSourceGeneratingCompiler implements SourceGeneratingCompiler, 
                 JFlexPsiFile flexPsiFile = (JFlexPsiFile) psiFile;
                 ASTNode node = flexPsiFile.getNode();
                 if (node != null) {
-                    ASTNode classStatement = node.findChildByType(JFlexElementTypes.CLASS_STATEMENT);
-                    if (classStatement != null) {
-                        JFlexClassStatement psiClassStatement = (JFlexClassStatement) classStatement.getPsi();
-                        JFlexExpression generateName = psiClassStatement.getValue();
-                        if (generateName != null) {
-                            generationName = generateName.getText();
-                        }
+                    /* lazy-lazy parser won't actually parse a file it has not been opened in editor before.
+                     * let's persuade it pretending that we really need all the stuff in a file.*/
+                    node.getPsi().getChildren();
+                    JFlexElement generateName = flexPsiFile.getClassname();
+                    if (generateName != null) {
+                        generationName = generateName.getText();
                     }
                 }
             }
@@ -198,7 +196,11 @@ public class JFlexSourceGeneratingCompiler implements SourceGeneratingCompiler, 
             VirtualFile[] files = compileScope.getFiles(JFlexFileTypeManager.getInstance().getFileType(), false);
             if (files != null) {
                 List<GenerationItem> items = new ArrayList<GenerationItem>(files.length);
+                CompilerConfiguration compilerConfiguration = CompilerConfiguration.getInstance(project);
                 for (VirtualFile file : files) {
+                    if (context.isMake() && compilerConfiguration.isExcludedFromCompilation(file)) {
+                        continue;
+                    }
                     JFlexGenerationItem generationItem = new JFlexGenerationItem(context.getModuleByFile(file), file, fileIndex.isInTestSourceContent(file));
                     if (context.isMake()) {
                         File generatedFile = generationItem.getGeneratedFile();

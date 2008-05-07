@@ -7,6 +7,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.tree.IElementType;
 import org.intellij.lang.jflex.JFlexElementTypes;
+import org.intellij.lang.jflex.util.JFlexBundle;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -89,7 +90,7 @@ public class JFlexParser implements PsiParser {
                 if (builder.getTokenType() == JFlexElementTypes.OPTION_COMMA) {
                     builder.advanceLexer();
                 } else {
-                    builder.error("Comma expected");
+                    builder.error(JFlexBundle.message("parser.comma.expected"));
                 }
             }
 
@@ -98,7 +99,7 @@ public class JFlexParser implements PsiParser {
                 builder.advanceLexer();
                 interfaceMarker.done(markWith);
             } else {
-                builder.error("Expression expected");
+                builder.error(JFlexBundle.message("parser.expression.expected"));
                 interfaceMarker.drop();
                 break;
             }
@@ -123,7 +124,7 @@ public class JFlexParser implements PsiParser {
         builder.advanceLexer();
 
         if (builder.getTokenType() != JFlexElementTypes.EQ) {
-            builder.error(" \"=\" expected");
+            builder.error(JFlexBundle.message("parser.eq.expected"));
         } else {
             builder.advanceLexer();
         }
@@ -138,7 +139,7 @@ public class JFlexParser implements PsiParser {
 
         if (found == 0) {
             macrovalue.drop();
-            builder.error("Macro value expected");
+            builder.error(JFlexBundle.message("parser.macrovalue.expected"));
         } else {
             macrovalue.done(JFlexElementTypes.REGEXP);
         }
@@ -182,7 +183,7 @@ public class JFlexParser implements PsiParser {
     private void parseOptionParamExpression(PsiBuilder builder) {
         PsiBuilder.Marker expr = builder.mark();
         if (builder.getTokenType() != JFlexElementTypes.OPTION_PARAMETER) {
-            builder.error("Expected expression");
+            builder.error(JFlexBundle.message("parser.expression.expected"));
             expr.drop();
         } else {
             builder.advanceLexer();

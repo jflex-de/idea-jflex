@@ -1,14 +1,14 @@
 <!DOCTYPE idea-plugin PUBLIC "Plugin/DTD" "http://plugins.intellij.net/plugin.dtd">
 <idea-plugin>
-    <vendor>Alexey Efimov</vendor>
+    <vendor>Alexey Efimov, Max Ishchenko</vendor>
 
     <name>JFlex Support</name>
-    <version>1.1.1</version>
+    <version>1.2.0</version>
 
     <description>Enables JFlex support in IntelliJ IDEA.</description>
     <resource-bundle>org.intellij.lang.jflex.util.JFlexBundle</resource-bundle>
 
-    <idea-version since-build="7757"/>
+    <idea-version since-build="7821"/>
 
     <extensions xmlns="com.intellij">
         <applicationConfigurable implementation="org.intellij.lang.jflex.options.JFlexConfigurable"/>
