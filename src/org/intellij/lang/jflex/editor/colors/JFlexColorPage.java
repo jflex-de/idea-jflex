@@ -2,9 +2,12 @@ package org.intellij.lang.jflex.editor.colors;
 
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
+import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory;
 import com.intellij.openapi.options.colors.AttributesDescriptor;
 import com.intellij.openapi.options.colors.ColorDescriptor;
 import com.intellij.openapi.options.colors.ColorSettingsPage;
+import com.intellij.lang.LanguageParserDefinitions;
+import com.intellij.lang.Language;
 import org.intellij.lang.jflex.editor.JFlexHighlighterColors;
 import org.intellij.lang.jflex.fileTypes.JFlexFileTypeManager;
 import org.jetbrains.annotations.NonNls;
@@ -85,7 +88,8 @@ final class JFlexColorPage implements ColorSettingsPage {
 
     @NotNull
     public SyntaxHighlighter getHighlighter() {
-        return JFlexFileTypeManager.getInstance().getFileType().getLanguage().getSyntaxHighlighter(null, null);
+        Language jflexLanguage = JFlexFileTypeManager.getInstance().getFileType().getLanguage();
+        return SyntaxHighlighterFactory.getSyntaxHighlighter(jflexLanguage, null, null);
     }
 
     @Nullable

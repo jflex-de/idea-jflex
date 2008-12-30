@@ -1,6 +1,7 @@
 package org.intellij.lang.jflex.editor;
 
 import com.intellij.openapi.editor.HighlighterColors;
+import com.intellij.openapi.editor.SyntaxHighlighterColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.editor.markup.TextAttributes;
 
@@ -13,28 +14,28 @@ import java.awt.*;
  */
 public interface JFlexHighlighterColors {
     TextAttributesKey COMMENT = TextAttributesKey.createTextAttributesKey(
-            "JFLEX.COMMENT", HighlighterColors.JAVA_BLOCK_COMMENT.getDefaultAttributes()
+            "JFLEX.COMMENT", SyntaxHighlighterColors.JAVA_BLOCK_COMMENT.getDefaultAttributes()
     );
     TextAttributesKey STRING = TextAttributesKey.createTextAttributesKey(
-            "JFLEX.STRING", HighlighterColors.JAVA_STRING.getDefaultAttributes()
+            "JFLEX.STRING", SyntaxHighlighterColors.STRING.getDefaultAttributes()
     );
     TextAttributesKey COMMA = TextAttributesKey.createTextAttributesKey(
-            "JFLEX_COMMA", HighlighterColors.JAVA_COMMA.getDefaultAttributes()
+            "JFLEX_COMMA", SyntaxHighlighterColors.COMMA.getDefaultAttributes()
     );
     TextAttributesKey OPERATION_SIGN = TextAttributesKey.createTextAttributesKey(
-            "JFLEX_OPERATION_SIGN", HighlighterColors.JAVA_OPERATION_SIGN.getDefaultAttributes()
+            "JFLEX_OPERATION_SIGN", SyntaxHighlighterColors.OPERATION_SIGN.getDefaultAttributes()
     );
     TextAttributesKey BRACES = TextAttributesKey.createTextAttributesKey(
-            "JFLEX_BRACES", HighlighterColors.JAVA_BRACES.getDefaultAttributes()
+            "JFLEX_BRACES", SyntaxHighlighterColors.BRACES.getDefaultAttributes()
     );
     TextAttributesKey BRACKETS = TextAttributesKey.createTextAttributesKey(
-            "JFLEX_BRACES", HighlighterColors.JAVA_BRACKETS.getDefaultAttributes()
+            "JFLEX_BRACES", SyntaxHighlighterColors.BRACKETS.getDefaultAttributes()
     );
     TextAttributesKey ANGLE_BRACKETS = TextAttributesKey.createTextAttributesKey(
-            "JFLEX_ANGLE_BRACKETS", HighlighterColors.JAVA_BRACKETS.getDefaultAttributes()
+            "JFLEX_ANGLE_BRACKETS", SyntaxHighlighterColors.BRACKETS.getDefaultAttributes()
     );
     TextAttributesKey PARENTHS = TextAttributesKey.createTextAttributesKey(
-            "JFLEX_PARENTHS", HighlighterColors.JAVA_PARENTHS.getDefaultAttributes()
+            "JFLEX_PARENTHS", SyntaxHighlighterColors.PARENTHS.getDefaultAttributes()
     );
     TextAttributesKey SECTION_SIGN = TextAttributesKey.createTextAttributesKey(
             "JFLEX.SECTION_SIGN", new TextAttributes(

@@ -10,8 +10,8 @@ import com.intellij.psi.PsiReferenceExpression;
  */
 public class JFlexElementVisitor extends PsiElementVisitor {
 
-    public void visitReferenceExpression(PsiReferenceExpression expression) {
-        visitExpression(expression);
-    }
+//    public void visitReferenceExpression(PsiReferenceExpression expression) {
+//        visitExpression(expression);
+//    }
 
 }

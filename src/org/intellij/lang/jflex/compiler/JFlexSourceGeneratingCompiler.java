@@ -27,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.DataInput;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -114,8 +115,8 @@ public class JFlexSourceGeneratingCompiler implements SourceGeneratingCompiler, 
         return true;
     }
 
-    public ValidityState createValidityState(DataInputStream is) throws IOException {
-        return TimestampValidityState.load(is);
+    public ValidityState createValidityState(DataInput in) throws IOException {
+        return TimestampValidityState.load(in);
     }
 
     private static class JFlexGenerationItem implements GenerationItem {

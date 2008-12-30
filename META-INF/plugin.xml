@@ -14,11 +14,16 @@
     <description>Enables JFlex support in IntelliJ IDEA.</description>
     <resource-bundle>org.intellij.lang.jflex.util.JFlexBundle</resource-bundle>
 
-    <idea-version since-build="7757"/>
+    <idea-version since-build="9164"/>
 
-    <extensions xmlns="com.intellij">
+    <extensions defaultExtensionNs="com.intellij">
         <applicationConfigurable implementation="org.intellij.lang.jflex.options.JFlexConfigurable"/>
         <colorSettingsPage implementation="org.intellij.lang.jflex.editor.colors.JFlexColorPage"/>
+        <lang.parserDefinition language="JFlex" implementationClass="org.intellij.lang.jflex.JFlexParserDefinition"/>
+        <lang.documentationProvider language="JFlex" implementationClass="org.intellij.lang.jflex.JFlexDocumentationProvider"/>
+        <lang.findUsagesProvider language="JFlex" implementationClass="org.intellij.lang.jflex.JFlexFindUsagesProvider"/>
+        <lang.commenter language="JFlex" implementationClass="org.intellij.lang.jflex.JFlexCommenter"/>
+        <annotator language="JFlex" implementationClass="org.intellij.lang.jflex.validation.JFlexAnnotatingVisitor"/>
     </extensions>
 
     <application-components>

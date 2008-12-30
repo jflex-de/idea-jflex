@@ -1,6 +1,5 @@
 package org.intellij.lang.jflex.psi.impl;
 
-import com.intellij.codeInsight.javadoc.JavaDocManager;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.tree.TokenSet;
 import org.intellij.lang.jflex.JFlexElementTypes;
@@ -28,9 +27,7 @@ public class JFlexStateStatementImpl extends JFlexElementImpl implements JFlexSt
         for (int i = 0; i < states.length; i++) {
             result[i] = (JFlexStateDefinition) states[i].getPsi();
         }
-        JavaDocManager.getProviderFromElement(this);
         return result;
     }
-
 
 }

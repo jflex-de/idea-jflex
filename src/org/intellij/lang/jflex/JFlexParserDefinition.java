@@ -83,4 +83,10 @@ public class JFlexParserDefinition implements ParserDefinition {
         final Lexer lexer = createLexer(left.getPsi().getProject());
         return LanguageUtil.canStickTokensTogetherByLexer(left, right, lexer, 0);
     }
+
+    @NotNull
+    public TokenSet getStringLiteralElements() {
+        return JFlexElementTypes.COMMENTS;
+    }
+
 }
