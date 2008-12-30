@@ -3,9 +3,11 @@
 
     <name>JFlex Support</name>
     <description>JFlex The Fast Scanner Generator for Java support.</description>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
     <vendor>Alexey Efimov, Max Ishchenko</vendor>
     <change-notes><![CDATA[
+    1.3.0 - Updated for IDEA 8.<br>
+
     1.2.0 - Embedded Java code support, "Find Usages" for macroses and states, flex files can be excluded from
     compile, "File not generated" bug fixed, settings GUI fixed.<br>
     ]]>
