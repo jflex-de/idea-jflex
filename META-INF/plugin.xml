@@ -3,9 +3,11 @@
 
     <name>JFlex Support</name>
     <description>JFlex The Fast Scanner Generator for Java support.</description>
-    <version>1.3.0</version>
+    <version>1.4.0</version>
     <vendor>Alexey Efimov, Max Ishchenko</vendor>
     <change-notes><![CDATA[
+    1.4.0 - Updated for IDEA 9.<br>
+
     1.3.0 - Updated for IDEA 8.<br>
 
     1.2.0 - Embedded Java code support, "Find Usages" for macroses and states, flex files can be excluded from
@@ -16,7 +18,7 @@
     <description>Enables JFlex support in IntelliJ IDEA.</description>
     <resource-bundle>org.intellij.lang.jflex.util.JFlexBundle</resource-bundle>
 
-    <idea-version since-build="9164"/>
+    <idea-version since-build="10666"/>
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationConfigurable implementation="org.intellij.lang.jflex.options.JFlexConfigurable"/>

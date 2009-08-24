@@ -24,4 +24,12 @@ public class JFlexCommenter implements Commenter {
     public String getLineCommentPrefix() {
         return "//";
     }
+
+    public String getCommentedBlockCommentSuffix() {
+        return null;
+    }
+
+    public String getCommentedBlockCommentPrefix() {
+        return null;
+    }
 }

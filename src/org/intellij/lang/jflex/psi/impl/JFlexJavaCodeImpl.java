@@ -5,6 +5,7 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.LiteralTextEscaper;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiLanguageInjectionHost;
 import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
 import org.intellij.lang.jflex.JFlexElementTypes;
 import org.intellij.lang.jflex.injection.EmbeddedJavaLiteralTextEscaper;
@@ -39,6 +40,10 @@ public class JFlexJavaCodeImpl extends JFlexElementImpl implements JFlexJavaCode
 
     public void processInjectedPsi(@NotNull InjectedPsiVisitor visitor) {
         InjectedLanguageUtil.enumerate(this, visitor);
+    }
+
+    public PsiLanguageInjectionHost updateText(@NotNull String text) {
+        return this;
     }
 
     public void fixText(@NotNull String text) {

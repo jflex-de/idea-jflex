@@ -81,7 +81,7 @@ public class JFlexParserDefinition implements ParserDefinition {
 
     public SpaceRequirements spaceExistanceTypeBetweenTokens(ASTNode left, ASTNode right) {
         final Lexer lexer = createLexer(left.getPsi().getProject());
-        return LanguageUtil.canStickTokensTogetherByLexer(left, right, lexer, 0);
+        return LanguageUtil.canStickTokensTogetherByLexer(left, right, lexer);
     }
 
     @NotNull
