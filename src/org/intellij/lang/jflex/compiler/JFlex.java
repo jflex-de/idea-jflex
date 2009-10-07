@@ -1,5 +1,16 @@
 package org.intellij.lang.jflex.compiler;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.compiler.CompilerMessageCategory;
@@ -15,17 +26,6 @@ import org.intellij.lang.jflex.options.JFlexSettings;
 import org.intellij.lang.jflex.util.JFlexBundle;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * JFlexx wrapper to command line tool.
@@ -195,5 +195,9 @@ public final class JFlex {
             }
         });
         return false;
+    }
+
+    public static boolean isCompilationEnabled() {
+        return JFlexSettings.getInstance().ENABLED_COMPILATION;
     }
 }

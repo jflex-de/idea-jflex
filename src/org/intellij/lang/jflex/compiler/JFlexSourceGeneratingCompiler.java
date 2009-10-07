@@ -1,5 +1,13 @@
 package org.intellij.lang.jflex.compiler;
 
+import java.io.DataInput;
+import java.io.File;
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import com.intellij.compiler.CompilerConfiguration;
 import com.intellij.compiler.impl.CompilerUtil;
 import com.intellij.lang.ASTNode;
@@ -23,15 +31,6 @@ import org.intellij.lang.jflex.psi.JFlexPsiFile;
 import org.intellij.lang.jflex.util.JFlexBundle;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.DataInput;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * The source generating compiler for *.flex files.
@@ -78,22 +77,26 @@ public class JFlexSourceGeneratingCompiler implements SourceGeneratingCompiler, 
     private static final GenerationItem[] EMPTY_GENERATION_ITEM_ARRAY = new GenerationItem[]{};
 
     public GenerationItem[] getGenerationItems(CompileContext context) {
-        Module[] affectedModules = context.getCompileScope().getAffectedModules();
-        if (affectedModules != null && affectedModules.length > 0) {
-            Application application = ApplicationManager.getApplication();
-            return application.runReadAction(new PrepareAction(context));
+        if (JFlex.isCompilationEnabled()) {
+            Module[] affectedModules = context.getCompileScope().getAffectedModules();
+            if (affectedModules.length > 0) {
+                Application application = ApplicationManager.getApplication();
+                return application.runReadAction(new PrepareAction(context));
+            }
         }
         return EMPTY_GENERATION_ITEM_ARRAY;
     }
 
     public GenerationItem[] generate(CompileContext context, GenerationItem[] items, VirtualFile outputRootDirectory) {
-        if (items != null && items.length > 0) {
-            Application application = ApplicationManager.getApplication();
-            GenerationItem[] generationItems = application.runReadAction(new GenerateAction(context, items, outputRootDirectory));
-            for (GenerationItem item : generationItems) {
-                CompilerUtil.refreshIOFile(((JFlexGenerationItem) item).getGeneratedFile());
+        if (JFlex.isCompilationEnabled()) {
+            if (items != null && items.length > 0) {
+                Application application = ApplicationManager.getApplication();
+                GenerationItem[] generationItems = application.runReadAction(new GenerateAction(context, items, outputRootDirectory));
+                for (GenerationItem item : generationItems) {
+                    CompilerUtil.refreshIOFile(((JFlexGenerationItem) item).getGeneratedFile());
+                }
+                return generationItems;
             }
-            return generationItems;
         }
         return EMPTY_GENERATION_ITEM_ARRAY;
     }
@@ -104,12 +107,14 @@ public class JFlexSourceGeneratingCompiler implements SourceGeneratingCompiler, 
     }
 
     public boolean validateConfiguration(CompileScope scope) {
-        Module[] affectedModules = scope.getAffectedModules();
-        if (affectedModules != null && affectedModules.length > 0) {
-            Project project = affectedModules[0].getProject();
-            VirtualFile[] files = scope.getFiles(JFlexFileTypeManager.getInstance().getFileType(), false);
-            if (files != null && files.length > 0) {
-                return JFlex.validateConfiguration(project);
+        if (JFlex.isCompilationEnabled()) {
+            Module[] affectedModules = scope.getAffectedModules();
+            if (affectedModules.length > 0) {
+                Project project = affectedModules[0].getProject();
+                VirtualFile[] files = scope.getFiles(JFlexFileTypeManager.getInstance().getFileType(), false);
+                if (files.length > 0) {
+                    return JFlex.validateConfiguration(project);
+                }
             }
         }
         return true;
@@ -147,7 +152,10 @@ public class JFlexSourceGeneratingCompiler implements SourceGeneratingCompiler, 
                 }
             }
             this.generatedClassName = generationName;
-            this.generatedFile = new File(VfsUtil.virtualToIoFile(file.getParent()), MessageFormat.format(JAVA_FILE_NAME_PATTERN, generatedClassName));
+            VirtualFile parent = file.getParent();
+            this.generatedFile = parent != null ?
+                new File(VfsUtil.virtualToIoFile(parent), MessageFormat.format(JAVA_FILE_NAME_PATTERN, generatedClassName)) :
+                null;
         }
 
         public VirtualFile getFile() {
@@ -168,10 +176,6 @@ public class JFlexSourceGeneratingCompiler implements SourceGeneratingCompiler, 
 
         public Module getModule() {
             return module;
-        }
-
-        public String getGeneratedClassName() {
-            return generatedClassName;
         }
 
         @NotNull
@@ -195,26 +199,23 @@ public class JFlexSourceGeneratingCompiler implements SourceGeneratingCompiler, 
             ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
             CompileScope compileScope = context.getCompileScope();
             VirtualFile[] files = compileScope.getFiles(JFlexFileTypeManager.getInstance().getFileType(), false);
-            if (files != null) {
-                List<GenerationItem> items = new ArrayList<GenerationItem>(files.length);
-                CompilerConfiguration compilerConfiguration = CompilerConfiguration.getInstance(project);
-                for (VirtualFile file : files) {
-                    if (context.isMake() && compilerConfiguration.isExcludedFromCompilation(file)) {
-                        continue;
-                    }
-                    JFlexGenerationItem generationItem = new JFlexGenerationItem(context.getModuleByFile(file), file, fileIndex.isInTestSourceContent(file));
-                    if (context.isMake()) {
-                        File generatedFile = generationItem.getGeneratedFile();
-                        if (!generatedFile.exists() || generatedFile.lastModified() <= file.getTimeStamp()) {
-                            items.add(generationItem);
-                        }
-                    } else {
+            List<GenerationItem> items = new ArrayList<GenerationItem>(files.length);
+            CompilerConfiguration compilerConfiguration = CompilerConfiguration.getInstance(project);
+            for (VirtualFile file : files) {
+                if (context.isMake() && compilerConfiguration.isExcludedFromCompilation(file)) {
+                    continue;
+                }
+                JFlexGenerationItem generationItem = new JFlexGenerationItem(context.getModuleByFile(file), file, fileIndex.isInTestSourceContent(file));
+                if (context.isMake()) {
+                    File generatedFile = generationItem.getGeneratedFile();
+                    if (!generatedFile.exists() || generatedFile.lastModified() <= file.getTimeStamp()) {
                         items.add(generationItem);
                     }
+                } else {
+                    items.add(generationItem);
                 }
-                return items.toArray(new GenerationItem[items.size()]);
             }
-            return EMPTY_GENERATION_ITEM_ARRAY;
+            return items.toArray(new GenerationItem[items.size()]);
         }
     }
 

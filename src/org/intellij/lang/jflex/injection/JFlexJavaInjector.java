@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 public class JFlexJavaInjector implements LanguageInjector {
 
     public static final String DEFCLASS = "Yylex";
-    public static final String DEFMETHOD = "yylex";
     public static final String DEFTYPE = "int";
 
     private JFlexSettings settings;
@@ -27,7 +26,7 @@ public class JFlexJavaInjector implements LanguageInjector {
 
         if (_host instanceof JFlexJavaCode) {
 
-            if (!settings.EMBEDJAVA) return;
+            if (!settings.ENABLED_EMBED_JAVA) return;
 
             JFlexJavaCode host = (JFlexJavaCode) _host;
 

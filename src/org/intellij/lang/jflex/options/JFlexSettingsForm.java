@@ -1,11 +1,14 @@
 package org.intellij.lang.jflex.options;
 
-import com.intellij.openapi.application.Application;
-import com.intellij.openapi.application.ApplicationManager;
+import javax.swing.*;
+import java.awt.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ResourceBundle;
+
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
-import com.intellij.openapi.fileChooser.FileChooserFactory;
 import com.intellij.openapi.ui.ComponentWithBrowseButton;
 import com.intellij.openapi.ui.FixedSizeButton;
 import com.intellij.openapi.ui.Messages;
@@ -14,19 +17,12 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.StateRestoringCheckBox;
 import com.intellij.ui.TextFieldWithStoredHistory;
-import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
-//import com.intellij.util.ui.update.ComponentDisposable;
 import org.intellij.lang.jflex.util.JFlexBundle;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
 
 /**
  * JFlex options.
@@ -35,19 +31,22 @@ import java.util.ResourceBundle;
  */
 public final class JFlexSettingsForm implements PersistentStateComponent<JFlexSettings> {
     @NonNls
+    private static final String JFLEX_ENABLED_COMPILATION_KEY = "JFlex.EnabledCompilation";
+    @NonNls
     private static final String JFLEX_HOME_KEY = "JFlex.Home";
     @NonNls
     private static final String JFLEX_SKELETON_KEY = "JFlex.Skeleton";
     @NonNls
     private static final String JFLEX_OPTIONS_KEY = "JFlex.Options";
     @NonNls
-    private static final String JFLEX_EMBEDJAVA_KEY = "JFlex.EmbedJava";
+    private static final String JFLEX_ENABLED_EMBED_JAVA_KEY = "JFlex.EnabledEmbedJava";
 
     private ComponentWithBrowseButton<TextFieldWithStoredHistory> jFlexHomeTextField;
     private ComponentWithBrowseButton<TextFieldWithStoredHistory> skeletonPathTextField;
     private JPanel formComponent;
     private TextFieldWithStoredHistory commandLineOptionsTextField;
-    private JCheckBox injectJava;
+    private JCheckBox enabledEmbedJavaCheckBox;
+    private JCheckBox enabledCompilationCheckBox;
 
     private final JFlexSettings settings = new JFlexSettings();
 
@@ -63,6 +62,7 @@ public final class JFlexSettingsForm implements PersistentStateComponent<JFlexSe
     }
 
     private void createUIComponents() {
+        enabledCompilationCheckBox = new StateRestoringCheckBox(JFLEX_ENABLED_COMPILATION_KEY, true);
         TextFieldWithStoredHistory jflexHomeHistory = createHistoryTextField(JFLEX_HOME_KEY, JFlexSettings.getDefaultJFlexHome());
         jFlexHomeTextField = new ComponentWithBrowseButton<TextFieldWithStoredHistory>(jflexHomeHistory, null);
         fixButton(jflexHomeHistory, jFlexHomeTextField);
@@ -70,7 +70,7 @@ public final class JFlexSettingsForm implements PersistentStateComponent<JFlexSe
         skeletonPathTextField = new ComponentWithBrowseButton<TextFieldWithStoredHistory>(skeletonPathHistory, null);
         fixButton(skeletonPathHistory, skeletonPathTextField);
         commandLineOptionsTextField = createHistoryTextField(JFLEX_OPTIONS_KEY, JFlexSettings.DEFAULT_OPTIONS_CHARAT_NOBAK);
-        injectJava = new StateRestoringCheckBox(JFLEX_EMBEDJAVA_KEY, true);
+        enabledEmbedJavaCheckBox = new StateRestoringCheckBox(JFLEX_ENABLED_EMBED_JAVA_KEY, true);
     }
 
     private void fixButton(final TextFieldWithStoredHistory historyField, ComponentWithBrowseButton<TextFieldWithStoredHistory> control) {
@@ -94,7 +94,7 @@ public final class JFlexSettingsForm implements PersistentStateComponent<JFlexSe
     private static TextFieldWithStoredHistory createHistoryTextField(@NotNull String name, @NotNull String... defaultValues) {
         TextFieldWithStoredHistory storedHistory = new TextFieldWithStoredHistoryBugFixed(name);
         storedHistory.reset();
-        List<String> list = (List<String>) storedHistory.getHistory();
+        List<String> list = storedHistory.getHistory();
         list.removeAll(Arrays.asList(defaultValues));
         if (list.isEmpty()) {
             // Default histories
@@ -112,10 +112,11 @@ public final class JFlexSettingsForm implements PersistentStateComponent<JFlexSe
     }
 
     public boolean isModified(JFlexSettings state) {
-        return !jFlexHomeTextField.getChildComponent().getText().equals(state.JFLEX_HOME) ||
-                !skeletonPathTextField.getChildComponent().getText().equals(state.SKELETON_PATH) ||
-                !commandLineOptionsTextField.getText().equals(state.COMMAND_LINE_OPTIONS) ||
-                injectJava.isSelected() != state.EMBEDJAVA;
+        return enabledCompilationCheckBox.isSelected() != state.ENABLED_COMPILATION ||
+            !jFlexHomeTextField.getChildComponent().getText().equals(state.JFLEX_HOME) ||
+            !skeletonPathTextField.getChildComponent().getText().equals(state.SKELETON_PATH) ||
+            !commandLineOptionsTextField.getText().equals(state.COMMAND_LINE_OPTIONS) ||
+            enabledEmbedJavaCheckBox.isSelected() != state.ENABLED_EMBED_JAVA;
     }
 
     /**
@@ -143,8 +144,8 @@ public final class JFlexSettingsForm implements PersistentStateComponent<JFlexSe
         this.$$$loadLabelText$$$(label3, ResourceBundle.getBundle("org/intellij/lang/jflex/util/JFlexBundle").getString("command.line.options"));
         formComponent.add(label3, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         formComponent.add(commandLineOptionsTextField, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        this.$$$loadButtonText$$$(injectJava, ResourceBundle.getBundle("org/intellij/lang/jflex/util/JFlexBundle").getString("embeddedjava.checkbox"));
-        formComponent.add(injectJava, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        this.$$$loadButtonText$$$(enabledEmbedJavaCheckBox, ResourceBundle.getBundle("org/intellij/lang/jflex/util/JFlexBundle").getString("enabled.embed.java.code.support"));
+        formComponent.add(enabledEmbedJavaCheckBox, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         label1.setLabelFor(jFlexHomeTextField);
         label2.setLabelFor(skeletonPathTextField);
         label3.setLabelFor(commandLineOptionsTextField);
@@ -161,7 +162,9 @@ public final class JFlexSettingsForm implements PersistentStateComponent<JFlexSe
         for (int i = 0; i < text.length(); i++) {
             if (text.charAt(i) == '&') {
                 i++;
-                if (i == text.length()) break;
+                if (i == text.length()) {
+                    break;
+                }
                 if (!haveMnemonic && text.charAt(i) != '&') {
                     haveMnemonic = true;
                     mnemonic = text.charAt(i);
@@ -188,7 +191,9 @@ public final class JFlexSettingsForm implements PersistentStateComponent<JFlexSe
         for (int i = 0; i < text.length(); i++) {
             if (text.charAt(i) == '&') {
                 i++;
-                if (i == text.length()) break;
+                if (i == text.length()) {
+                    break;
+                }
                 if (!haveMnemonic && text.charAt(i) != '&') {
                     haveMnemonic = true;
                     mnemonic = text.charAt(i);
@@ -226,18 +231,6 @@ public final class JFlexSettingsForm implements PersistentStateComponent<JFlexSe
         }
     }
 
-    public ComponentWithBrowseButton<TextFieldWithStoredHistory> getJFlexHomeTextField() {
-        return jFlexHomeTextField;
-    }
-
-    public ComponentWithBrowseButton<TextFieldWithStoredHistory> getSkeletonPathTextField() {
-        return skeletonPathTextField;
-    }
-
-    public TextFieldWithStoredHistory getCommandLineOptionsTextField() {
-        return commandLineOptionsTextField;
-    }
-
     private static class HistoryAccessor implements TextComponentAccessor<TextFieldWithStoredHistory> {
         public String getText(TextFieldWithStoredHistory component) {
             return component.getText().replace('\\', '/');
@@ -250,36 +243,39 @@ public final class JFlexSettingsForm implements PersistentStateComponent<JFlexSe
 
     public final JFlexSettings getState() {
         if (validate()) {
+            settings.ENABLED_COMPILATION = enabledCompilationCheckBox.isSelected();
             settings.JFLEX_HOME = jFlexHomeTextField.getChildComponent().getText();
             settings.SKELETON_PATH = skeletonPathTextField.getChildComponent().getText();
             settings.COMMAND_LINE_OPTIONS = commandLineOptionsTextField.getText();
-            settings.EMBEDJAVA = injectJava.isSelected();
+            settings.ENABLED_EMBED_JAVA = enabledEmbedJavaCheckBox.isSelected();
         }
         return settings;
     }
 
     private boolean validate() {
-        String text = jFlexHomeTextField.getChildComponent().getText();
-        if (StringUtil.isEmptyOrSpaces(text)) {
-            Messages.showWarningDialog(jFlexHomeTextField, JFlexBundle.message("please.enter.path.to.jflex.home.directory"), JFlexBundle.message("jflex"));
-            jFlexHomeTextField.requestFocus();
-            return false;
+        if (enabledCompilationCheckBox.isSelected()) {
+            String text = jFlexHomeTextField.getChildComponent().getText();
+            if (StringUtil.isEmptyOrSpaces(text)) {
+                Messages.showWarningDialog(jFlexHomeTextField, JFlexBundle.message("please.enter.path.to.jflex.home.directory"), JFlexBundle.message("jflex"));
+                jFlexHomeTextField.requestFocus();
+                return false;
+            }
+
+            // All fine add to history
+            jFlexHomeTextField.getChildComponent().addCurrentTextToHistory();
+            skeletonPathTextField.getChildComponent().addCurrentTextToHistory();
+            commandLineOptionsTextField.addCurrentTextToHistory();
         }
-
-        // All fine add to history
-        jFlexHomeTextField.getChildComponent().addCurrentTextToHistory();
-        skeletonPathTextField.getChildComponent().addCurrentTextToHistory();
-        commandLineOptionsTextField.addCurrentTextToHistory();
-
         return true;
     }
 
     public final void loadState(JFlexSettings state) {
         settings.loadState(state);
+        enabledCompilationCheckBox.setSelected(state.ENABLED_COMPILATION);
         setTextWithHistory(jFlexHomeTextField.getChildComponent(), state.JFLEX_HOME);
         setTextWithHistory(skeletonPathTextField.getChildComponent(), state.SKELETON_PATH);
         setTextWithHistory(commandLineOptionsTextField, state.COMMAND_LINE_OPTIONS);
-        injectJava.setSelected(state.EMBEDJAVA);
+        enabledEmbedJavaCheckBox.setSelected(state.ENABLED_EMBED_JAVA);
     }
 
     private static void setTextWithHistory(TextFieldWithStoredHistory component, String text) {

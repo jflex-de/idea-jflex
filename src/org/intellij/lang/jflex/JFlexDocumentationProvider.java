@@ -1,5 +1,7 @@
 package org.intellij.lang.jflex;
 
+import java.util.List;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.documentation.DocumentationProvider;
 import com.intellij.psi.PsiElement;
@@ -21,14 +23,15 @@ public class JFlexDocumentationProvider implements DocumentationProvider {
     }
 
     @Nullable
-    public String getUrlFor(PsiElement element, PsiElement originalElement) {
+    public List<String> getUrlFor(PsiElement element, PsiElement originalElement) {
         return null;
     }
 
     @Nullable
     public String generateDoc(PsiElement element, PsiElement originalElement) {
         if (element instanceof JFlexMacroDefinition) {
-            ASTNode regexp = element.getNode().findChildByType(JFlexElementTypes.REGEXP);
+            ASTNode astNode = element.getNode();
+            ASTNode regexp = astNode != null ? astNode.findChildByType(JFlexElementTypes.REGEXP) : null;
             return regexp != null ? regexp.getText() : "No regexp found.";
         }
         return null;

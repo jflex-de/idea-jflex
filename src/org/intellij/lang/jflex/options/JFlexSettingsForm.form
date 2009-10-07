@@ -1,71 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="org.intellij.lang.jflex.options.JFlexSettingsForm">
-  <grid id="27dc6" binding="formComponent" layout-manager="GridLayoutManager" row-count="5" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="formComponent" layout-manager="GridLayoutManager" row-count="4" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="461" height="123"/>
+      <xy x="20" y="20" width="468" height="285"/>
     </constraints>
     <properties/>
     <border type="none"/>
     <children>
-      <component id="de0d9" class="javax.swing.JLabel">
-        <constraints>
-          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <labelFor value="996d1"/>
-          <text resource-bundle="org/intellij/lang/jflex/util/JFlexBundle" key="path.to.jflex"/>
-        </properties>
-      </component>
       <vspacer id="facff">
         <constraints>
-          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
         </constraints>
       </vspacer>
-      <component id="996d1" class="com.intellij.openapi.ui.ComponentWithBrowseButton" binding="jFlexHomeTextField" custom-create="true">
+      <component id="688a2" class="javax.swing.JCheckBox" binding="enabledCompilationCheckBox" custom-create="true">
         <constraints>
-          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties/>
-      </component>
-      <component id="cf514" class="javax.swing.JLabel">
-        <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <labelFor value="16b39"/>
-          <text resource-bundle="org/intellij/lang/jflex/util/JFlexBundle" key="skeleton.file"/>
+          <text resource-bundle="org/intellij/lang/jflex/util/JFlexBundle" key="enabled.jflex.files.compilation"/>
         </properties>
       </component>
-      <component id="16b39" class="com.intellij.openapi.ui.ComponentWithBrowseButton" binding="skeletonPathTextField" custom-create="true">
+      <component id="c68a4" class="javax.swing.JCheckBox" binding="enabledEmbedJavaCheckBox" custom-create="true">
         <constraints>
-          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties/>
-      </component>
-      <component id="a0284" class="javax.swing.JLabel">
-        <constraints>
-          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <labelFor value="8f2d8"/>
-          <text resource-bundle="org/intellij/lang/jflex/util/JFlexBundle" key="command.line.options"/>
+          <text resource-bundle="org/intellij/lang/jflex/util/JFlexBundle" key="enabled.embed.java.code.support"/>
         </properties>
       </component>
-      <component id="8f2d8" class="com.intellij.ui.TextFieldWithStoredHistory" binding="commandLineOptionsTextField" custom-create="true">
+      <grid id="8413d" layout-manager="GridLayoutManager" row-count="3" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
-          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties/>
-      </component>
-      <component id="c68a4" class="javax.swing.JCheckBox" binding="injectJava" custom-create="true">
-        <constraints>
-          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text resource-bundle="org/intellij/lang/jflex/util/JFlexBundle" key="embeddedjava.checkbox"/>
+          <enabled value="true"/>
         </properties>
-      </component>
+        <border type="none" title-resource-bundle="org/intellij/lang/jflex/util/JFlexBundle" title-key="jflex.compiler.settings"/>
+        <children>
+          <component id="de0d9" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <labelFor value="996d1"/>
+              <text resource-bundle="org/intellij/lang/jflex/util/JFlexBundle" key="path.to.jflex"/>
+            </properties>
+          </component>
+          <component id="996d1" class="com.intellij.openapi.ui.ComponentWithBrowseButton" binding="jFlexHomeTextField" custom-create="true">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
+          </component>
+          <component id="cf514" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <labelFor value="16b39"/>
+              <text resource-bundle="org/intellij/lang/jflex/util/JFlexBundle" key="skeleton.file"/>
+            </properties>
+          </component>
+          <component id="16b39" class="com.intellij.openapi.ui.ComponentWithBrowseButton" binding="skeletonPathTextField" custom-create="true">
+            <constraints>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
+          </component>
+          <component id="a0284" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <labelFor value="8f2d8"/>
+              <text resource-bundle="org/intellij/lang/jflex/util/JFlexBundle" key="command.line.options"/>
+            </properties>
+          </component>
+          <component id="8f2d8" class="com.intellij.ui.TextFieldWithStoredHistory" binding="commandLineOptionsTextField" custom-create="true">
+            <constraints>
+              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
+          </component>
+        </children>
+      </grid>
     </children>
   </grid>
 </form>

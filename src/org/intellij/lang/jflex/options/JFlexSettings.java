@@ -31,10 +31,11 @@ public final class JFlexSettings implements PersistentStateComponent<JFlexSettin
         return ApplicationManager.getApplication().getComponent(JFlexSettings.class);
     }
 
+    public boolean ENABLED_COMPILATION = true;
     public String JFLEX_HOME = getDefaultJFlexHome();
     public String SKELETON_PATH = getDefaultSkeletonPath(JFLEX_HOME);
     public String COMMAND_LINE_OPTIONS = DEFAULT_OPTIONS_CHARAT_NOBAK;
-    public boolean EMBEDJAVA = true;
+    public boolean ENABLED_EMBED_JAVA = true;
 
     public JFlexSettings getState() {
         return this;

@@ -1,14 +1,13 @@
 package org.intellij.lang.jflex.options;
 
+import javax.swing.*;
+
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import org.intellij.lang.jflex.util.JFlexBundle;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
 
 /**
  * Configurable for JFlex.
@@ -42,10 +41,7 @@ public final class JFlexConfigurable implements Configurable {
     }
 
     public boolean isModified() {
-        if (settingsForm != null) {
-            return settingsForm.isModified(JFlexSettings.getInstance());
-        }
-        return false;
+        return settingsForm != null && settingsForm.isModified(JFlexSettings.getInstance());
     }
 
     public void apply() throws ConfigurationException {
@@ -62,17 +58,5 @@ public final class JFlexConfigurable implements Configurable {
 
     public void disposeUIResources() {
         settingsForm = null;
-    }
-
-    @NonNls
-    @NotNull
-    public String getComponentName() {
-        return "JFlexSettings.Configurable";
-    }
-
-    public void initComponent() {
-    }
-
-    public void disposeComponent() {
     }
 }
