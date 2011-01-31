@@ -50,7 +50,7 @@ public class JFlexJavaCodeImpl extends JFlexElementImpl implements JFlexJavaCode
     }
 
     @NotNull
-    public LiteralTextEscaper createLiteralTextEscaper() {
+    public LiteralTextEscaper<JFlexJavaCode> createLiteralTextEscaper() {
         return new EmbeddedJavaLiteralTextEscaper(this);
     }
 }
