@@ -1,15 +1,8 @@
 package org.intellij.lang.jflex.compiler;
 
-import java.io.DataInput;
-import java.io.File;
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import com.intellij.compiler.CompilerConfiguration;
 import com.intellij.compiler.impl.CompilerUtil;
+import com.intellij.execution.CantRunException;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
@@ -17,6 +10,7 @@ import com.intellij.openapi.compiler.*;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Computable;
@@ -31,6 +25,14 @@ import org.intellij.lang.jflex.psi.JFlexPsiFile;
 import org.intellij.lang.jflex.util.JFlexBundle;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.DataInput;
+import java.io.File;
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The source generating compiler for *.flex files.
@@ -91,7 +93,7 @@ public class JFlexSourceGeneratingCompiler implements SourceGeneratingCompiler, 
         if (JFlex.isCompilationEnabled()) {
             if (items != null && items.length > 0) {
                 Application application = ApplicationManager.getApplication();
-                GenerationItem[] generationItems = application.runReadAction(new GenerateAction(context, items, outputRootDirectory));
+                GenerationItem[] generationItems = application.runReadAction(new GenerateAction(context, items, outputRootDirectory, ProjectRootManager.getInstance(project).getProjectSdk()));
                 for (GenerationItem item : generationItems) {
                     CompilerUtil.refreshIOFile(((JFlexGenerationItem) item).getGeneratedFile());
                 }
@@ -222,11 +224,13 @@ public class JFlexSourceGeneratingCompiler implements SourceGeneratingCompiler, 
     private static class GenerateAction implements Computable<GenerationItem[]> {
         private final CompileContext context;
         private final GenerationItem[] items;
+        private final Sdk projectSdk;
         private final File outputDir;
 
-        public GenerateAction(CompileContext context, GenerationItem[] items, VirtualFile outputRootDirectory) {
+        public GenerateAction(CompileContext context, GenerationItem[] items, VirtualFile outputRootDirectory, Sdk projectSdk) {
             this.context = context;
             this.items = items;
+            this.projectSdk = projectSdk;
             outputDir = VfsUtil.virtualToIoFile(outputRootDirectory);
         }
 
@@ -238,7 +242,7 @@ public class JFlexSourceGeneratingCompiler implements SourceGeneratingCompiler, 
                     VirtualFile file = flexItem.getFile();
                     if (file != null && file.isValid()) {
                         try {
-                            Map<CompilerMessageCategory, List<JFlexMessage>> messages = JFlex.compile(file);
+                            Map<CompilerMessageCategory, List<JFlexMessage>> messages = JFlex.compile(file, projectSdk);
                             addMessages(file, messages);
                             if (messages.get(CompilerMessageCategory.ERROR).isEmpty()) {
                                 File outFile = flexItem.getGeneratedFile();
@@ -250,6 +254,8 @@ public class JFlexSourceGeneratingCompiler implements SourceGeneratingCompiler, 
                                 }
                             }
                         } catch (IOException e) {
+                            context.addMessage(CompilerMessageCategory.ERROR, e.getMessage(), file.getUrl(), -1, -1);
+                        } catch (CantRunException e) {
                             context.addMessage(CompilerMessageCategory.ERROR, e.getMessage(), file.getUrl(), -1, -1);
                         }
                     }

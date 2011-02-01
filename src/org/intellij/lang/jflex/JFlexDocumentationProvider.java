@@ -1,13 +1,13 @@
 package org.intellij.lang.jflex;
 
-import java.util.List;
-
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.documentation.DocumentationProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
 import org.intellij.lang.jflex.psi.JFlexMacroDefinition;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -44,6 +44,11 @@ public class JFlexDocumentationProvider implements DocumentationProvider {
 
     @Nullable
     public PsiElement getDocumentationElementForLink(PsiManager psiManager, String link, PsiElement context) {
+        return null;
+    }
+
+    @Nullable
+    public String getQuickNavigateInfo(PsiElement element, PsiElement originalElement) {
         return null;
     }
 }

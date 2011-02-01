@@ -1,21 +1,14 @@
 package org.intellij.lang.jflex.compiler;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import com.intellij.execution.CantRunException;
+import com.intellij.execution.configurations.CommandLineBuilder;
+import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.compiler.CompilerMessageCategory;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.StreamUtil;
@@ -27,6 +20,17 @@ import org.intellij.lang.jflex.util.JFlexBundle;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * JFlexx wrapper to command line tool.
  *
@@ -37,15 +41,19 @@ public final class JFlex {
     private static final Pattern LINE_NUMBER_PATTERN = Pattern.compile(".*?\\(line\\s(\\d+)\\)\\:\\s*?$");
 
     @NonNls
-    public static final String BIN_DIRECTORY = "bin";
+    private static final String JFLEX_MAIN_CLASS = "JFlex.Main";
     @NonNls
-    public static final String JFLEX_BAT = "jflex.bat";
+    private static final String JFLEX_JAR_PATH = "./lib/JFlex.jar";
     @NonNls
-    public static final String JFLEX_SH = "jflex.sh";
+    public static final String BIN_BASH = "/bin/bash";
     @NonNls
-    private static final String COMMAND_COM = "command.com /C ";
+    public static final String HYPHEN_C = "-c";
     @NonNls
-    private static final String CMD_EXE = "cmd.exe /C ";
+    public static final String SLASH_C = "/C";
+    @NonNls
+    private static final String COMMAND_COM = "command.com";
+    @NonNls
+    private static final String CMD_EXE = "cmd.exe";
     @NonNls
     private static final String OPTION_SKEL = " --skel ";
     @NonNls
@@ -60,10 +68,21 @@ public final class JFlex {
     private static final char SPACE = ' ';
 
     @NotNull
-    public static Map<CompilerMessageCategory, List<JFlexMessage>> compile(VirtualFile file) throws IOException {
+    public static Map<CompilerMessageCategory, List<JFlexMessage>> compile(VirtualFile file, Sdk projectSdk) throws IOException, CantRunException {
+
         JFlexSettings settings = JFlexSettings.getInstance();
-        StringBuilder command = new StringBuilder(SystemInfo.isWindows ? SystemInfo.isWindows9x ? COMMAND_COM : CMD_EXE : "");
-        command.append(SystemInfo.isWindows ? JFLEX_BAT : JFLEX_SH);
+
+        //Earlier code used jflex.bat or jflex.sh. These files are broken after IDEA went open-source and changed
+        //its sdk distribution structure. It's better to call JFlex.Main directly, not using any dumb bat or sh files.
+        JavaParameters javaParameters = new JavaParameters();
+        javaParameters.setJdk(projectSdk);
+        javaParameters.setMainClass(JFLEX_MAIN_CLASS);
+        javaParameters.getClassPath().add(JFLEX_JAR_PATH);
+
+        StringBuilder command = new StringBuilder(CommandLineBuilder.createFromJavaParameters(javaParameters).getCommandLineString());
+
+        //That options stuff can be refactored using javaParameters.getProgramParametersList().add(anOption),
+        //as it does auto-quoting if necessary.
         String options = MessageFormat.format(" {0} ", settings.COMMAND_LINE_OPTIONS);
         if (!StringUtil.isEmptyOrSpaces(options)) {
             command.append(options);
@@ -79,7 +98,15 @@ public final class JFlex {
             command.append(OPTION_D).append(QUOT).append(parent.getPath()).append(QUOT);
         }
         command.append(SPACE).append(QUOT).append(file.getPath()).append(QUOT);
-        Process process = Runtime.getRuntime().exec(command.toString(), null, new File(settings.JFLEX_HOME, BIN_DIRECTORY));
+
+        String shell = SystemInfo.isWindows ? SystemInfo.isWindows9x ? COMMAND_COM : CMD_EXE : BIN_BASH;
+        String[] commands;
+        if (SystemInfo.isWindows) {
+            commands = new  String[]{shell, SLASH_C, QUOT + command.toString() + QUOT};
+        } else {
+            commands = new  String[]{shell, HYPHEN_C, command.toString()};
+        }
+        Process process = Runtime.getRuntime().exec(commands, null, new File(settings.JFLEX_HOME));
         try {
             InputStream out = process.getInputStream();
             try {
@@ -92,7 +119,14 @@ public final class JFlex {
                     Map<CompilerMessageCategory, List<JFlexMessage>> messages = new HashMap<CompilerMessageCategory, List<JFlexMessage>>();
                     messages.put(CompilerMessageCategory.ERROR, error);
                     messages.put(CompilerMessageCategory.INFORMATION, information);
-                    int code = process.exitValue();
+                    int code = 0;
+                    try {
+                        code = process.waitFor();
+                    } catch (InterruptedException e) {
+                        List<JFlexMessage> warnings = new ArrayList<JFlexMessage>();
+                        warnings.add(new JFlexMessage("Interrupted while waiting for Jflex to complete"));
+                        messages.put(CompilerMessageCategory.WARNING, warnings);
+                    }
                     if (code == 0) {
                         return messages;
                     } else {
@@ -163,21 +197,11 @@ public final class JFlex {
         JFlexSettings settings = JFlexSettings.getInstance();
         File home = new File(settings.JFLEX_HOME);
         if (home.isDirectory() && home.exists()) {
-            File bin = new File(home, BIN_DIRECTORY);
-            if (bin.isDirectory() && bin.exists()) {
-                File script = new File(bin, SystemInfo.isWindows ? JFLEX_BAT : JFLEX_SH);
-                if (script.isFile() && script.exists()) {
-                    if (!StringUtil.isEmptyOrSpaces(settings.SKELETON_PATH) && settings.COMMAND_LINE_OPTIONS.indexOf(OPTION_SKEL) == -1) {
-                        File skel = new File(settings.SKELETON_PATH);
-                        if (!skel.isFile() || !skel.exists()) {
-                            return showWarningMessageAndConfigure(project, JFlexBundle.message("jflex.skeleton.file.was.not.found"));
-                        }
-                    }
-                } else {
-                    return showWarningMessageAndConfigure(project, JFlexBundle.message("jflex.home.path.is.invalid"));
+            if (!StringUtil.isEmptyOrSpaces(settings.SKELETON_PATH) && settings.COMMAND_LINE_OPTIONS.indexOf(OPTION_SKEL) == -1) {
+                File skel = new File(settings.SKELETON_PATH);
+                if (!skel.isFile() || !skel.exists()) {
+                    return showWarningMessageAndConfigure(project, JFlexBundle.message("jflex.skeleton.file.was.not.found"));
                 }
-            } else {
-                return showWarningMessageAndConfigure(project, JFlexBundle.message("jflex.home.path.is.invalid"));
             }
         } else {
             return showWarningMessageAndConfigure(project, JFlexBundle.message("jflex.home.path.is.invalid"));
