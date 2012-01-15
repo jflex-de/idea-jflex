@@ -1,10 +1,10 @@
-<!DOCTYPE idea-plugin PUBLIC "Plugin/DTD" "http://plugins.intellij.net/plugin.dtd">
-<idea-plugin>
-
+<idea-plugin version="2">
     <name>JFlex Support</name>
-    <version>1.5.0</version>
-    <vendor>Alexey Efimov, Max Ishchenko</vendor>
+    <version>1.5.1</version>
+    <vendor>Alexey Efimov, Max Ishchenko, Jan Dolecek</vendor>
     <change-notes><![CDATA[
+    1.5.1 - Updated for IDEA 11, components refactored to extensions. (Jan Dolecek)<br>
+
     1.5.0 - Updated for IDEA 10, not using jflex.bat or jflex.sh anymore, executing JFlex.Main directly instead.<br>
 
     1.4.1 - Added support for disable compiler<br>
@@ -21,33 +21,21 @@
     <description>Enables JFlex support in IntelliJ IDEA.</description>
     <resource-bundle>org.intellij.lang.jflex.util.JFlexBundle</resource-bundle>
 
-    <idea-version since-build="103.14"/>
+    <idea-version since-build="111.167"/>
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationConfigurable implementation="org.intellij.lang.jflex.options.JFlexConfigurable"/>
         <colorSettingsPage implementation="org.intellij.lang.jflex.editor.colors.JFlexColorPage"/>
-        <lang.parserDefinition language="JFlex" implementationClass="org.intellij.lang.jflex.JFlexParserDefinition"/>
+        <lang.parserDefinition language="JFlex" implementationClass="org.intellij.lang.jflex.parser.JFlexParserDefinition"/>
         <lang.documentationProvider language="JFlex" implementationClass="org.intellij.lang.jflex.JFlexDocumentationProvider"/>
         <lang.findUsagesProvider language="JFlex" implementationClass="org.intellij.lang.jflex.JFlexFindUsagesProvider"/>
         <lang.commenter language="JFlex" implementationClass="org.intellij.lang.jflex.JFlexCommenter"/>
         <annotator language="JFlex" implementationClass="org.intellij.lang.jflex.validation.JFlexAnnotatingVisitor"/>
+        <languageInjector implementation="org.intellij.lang.jflex.injection.JFlexJavaInjector" />
+        <fileTypeFactory implementation="org.intellij.lang.jflex.fileTypes.JFlexFileTypeFactory" />
+        <compilerFactory implementation="org.intellij.lang.jflex.compiler.JFlexCompilerFactory" />
+
+        <applicationService serviceInterface="org.intellij.lang.jflex.options.JFlexSettings"
+                            serviceImplementation="org.intellij.lang.jflex.options.JFlexSettings" />
     </extensions>
-
-    <application-components>
-        <component>
-            <implementation-class>org.intellij.lang.jflex.fileTypes.JFlexFileTypeManager</implementation-class>
-        </component>
-        <component>
-            <implementation-class>org.intellij.lang.jflex.options.JFlexSettings</implementation-class>
-        </component>
-    </application-components>
-
-    <project-components>
-        <component>
-            <implementation-class>org.intellij.lang.jflex.compiler.JFlexSourceGeneratingCompiler</implementation-class>
-        </component>
-        <component>
-            <implementation-class>org.intellij.lang.jflex.injection.JFlexJavaInjectionComponent</implementation-class>
-        </component>
-    </project-components>
 </idea-plugin>

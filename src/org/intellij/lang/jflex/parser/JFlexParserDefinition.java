@@ -1,4 +1,4 @@
-package org.intellij.lang.jflex;
+package org.intellij.lang.jflex.parser;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LanguageUtil;
@@ -12,6 +12,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
+import org.intellij.lang.jflex.JFlexElementTypes;
 import org.intellij.lang.jflex.lexer.JFlexParsingLexer;
 import org.intellij.lang.jflex.parser.JFlexParser;
 import org.intellij.lang.jflex.psi.impl.*;

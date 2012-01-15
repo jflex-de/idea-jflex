@@ -8,8 +8,9 @@ import com.intellij.openapi.options.colors.ColorDescriptor;
 import com.intellij.openapi.options.colors.ColorSettingsPage;
 import com.intellij.lang.LanguageParserDefinitions;
 import com.intellij.lang.Language;
+import org.intellij.lang.jflex.JFlexLanguage;
 import org.intellij.lang.jflex.editor.JFlexHighlighterColors;
-import org.intellij.lang.jflex.fileTypes.JFlexFileTypeManager;
+import org.intellij.lang.jflex.fileTypes.JFlexFileType;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -88,13 +89,12 @@ final class JFlexColorPage implements ColorSettingsPage {
 
     @NotNull
     public SyntaxHighlighter getHighlighter() {
-        Language jflexLanguage = JFlexFileTypeManager.getInstance().getFileType().getLanguage();
+        Language jflexLanguage = JFlexLanguage.LANGUAGE;
         return SyntaxHighlighterFactory.getSyntaxHighlighter(jflexLanguage, null, null);
     }
 
     @Nullable
     public Icon getIcon() {
-        return JFlexFileTypeManager.getInstance().getFileType().getIcon();
+        return JFlexFileType.FILE_TYPE.getIcon();
     }
-
 }

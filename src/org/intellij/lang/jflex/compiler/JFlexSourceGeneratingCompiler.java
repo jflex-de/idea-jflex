@@ -19,7 +19,7 @@ import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
-import org.intellij.lang.jflex.fileTypes.JFlexFileTypeManager;
+import org.intellij.lang.jflex.fileTypes.JFlexFileType;
 import org.intellij.lang.jflex.psi.JFlexElement;
 import org.intellij.lang.jflex.psi.JFlexPsiFile;
 import org.intellij.lang.jflex.util.JFlexBundle;
@@ -39,43 +39,9 @@ import java.util.Map;
  *
  * @author Alexey Efimov
  */
-public class JFlexSourceGeneratingCompiler implements SourceGeneratingCompiler, ProjectComponent {
+public class JFlexSourceGeneratingCompiler implements SourceGeneratingCompiler {
     @NonNls
     private static final String JAVA_FILE_NAME_PATTERN = "{0}.java";
-
-    private final Project project;
-    private CompilerManager compilerManager;
-
-    public JFlexSourceGeneratingCompiler(Project project, CompilerManager compilerManager) {
-        this.project = project;
-        this.compilerManager = compilerManager;
-    }
-
-    public void projectOpened() {
-
-    }
-
-    public void projectClosed() {
-
-    }
-
-    @NotNull
-    @NonNls
-    public String getComponentName() {
-        return "JFlexCompiler";
-    }
-
-    public void initComponent() {
-        compilerManager.addCompilableFileType(JFlexFileTypeManager.getInstance().getFileType());
-        compilerManager.addCompiler(this);
-    }
-
-    public void disposeComponent() {
-        compilerManager.removeCompiler(this);
-        compilerManager.removeCompilableFileType(JFlexFileTypeManager.getInstance().getFileType());
-
-    }
-
     private static final GenerationItem[] EMPTY_GENERATION_ITEM_ARRAY = new GenerationItem[]{};
 
     public GenerationItem[] getGenerationItems(CompileContext context) {
@@ -93,7 +59,7 @@ public class JFlexSourceGeneratingCompiler implements SourceGeneratingCompiler, 
         if (JFlex.isCompilationEnabled()) {
             if (items != null && items.length > 0) {
                 Application application = ApplicationManager.getApplication();
-                GenerationItem[] generationItems = application.runReadAction(new GenerateAction(context, items, outputRootDirectory, ProjectRootManager.getInstance(project).getProjectSdk()));
+                GenerationItem[] generationItems = application.runReadAction(new GenerateAction(context, items, outputRootDirectory, ProjectRootManager.getInstance(context.getProject()).getProjectSdk()));
                 for (GenerationItem item : generationItems) {
                     CompilerUtil.refreshIOFile(((JFlexGenerationItem) item).getGeneratedFile());
                 }
@@ -113,7 +79,7 @@ public class JFlexSourceGeneratingCompiler implements SourceGeneratingCompiler, 
             Module[] affectedModules = scope.getAffectedModules();
             if (affectedModules.length > 0) {
                 Project project = affectedModules[0].getProject();
-                VirtualFile[] files = scope.getFiles(JFlexFileTypeManager.getInstance().getFileType(), false);
+                VirtualFile[] files = scope.getFiles(JFlexFileType.FILE_TYPE, false);
                 if (files.length > 0) {
                     return JFlex.validateConfiguration(project);
                 }
@@ -124,6 +90,11 @@ public class JFlexSourceGeneratingCompiler implements SourceGeneratingCompiler, 
 
     public ValidityState createValidityState(DataInput in) throws IOException {
         return TimestampValidityState.load(in);
+    }
+
+    @Override
+    public VirtualFile getPresentableFile(CompileContext context, Module module, VirtualFile outputRoot, VirtualFile generatedFile) {
+        return null;
     }
 
     private static class JFlexGenerationItem implements GenerationItem {
@@ -198,11 +169,11 @@ public class JFlexSourceGeneratingCompiler implements SourceGeneratingCompiler, 
         }
 
         public GenerationItem[] compute() {
-            ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
+            ProjectFileIndex fileIndex = ProjectRootManager.getInstance(context.getProject()).getFileIndex();
             CompileScope compileScope = context.getCompileScope();
-            VirtualFile[] files = compileScope.getFiles(JFlexFileTypeManager.getInstance().getFileType(), false);
+            VirtualFile[] files = compileScope.getFiles(JFlexFileType.FILE_TYPE, false);
             List<GenerationItem> items = new ArrayList<GenerationItem>(files.length);
-            CompilerConfiguration compilerConfiguration = CompilerConfiguration.getInstance(project);
+            CompilerConfiguration compilerConfiguration = CompilerConfiguration.getInstance(context.getProject());
             for (VirtualFile file : files) {
                 if (context.isMake() && compilerConfiguration.isExcludedFromCompilation(file)) {
                     continue;

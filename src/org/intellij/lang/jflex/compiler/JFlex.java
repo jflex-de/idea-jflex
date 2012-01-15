@@ -203,6 +203,11 @@ public final class JFlex {
                     return showWarningMessageAndConfigure(project, JFlexBundle.message("jflex.skeleton.file.was.not.found"));
                 }
             }
+
+            File jarFile = new File(settings.JFLEX_HOME + "/" + JFLEX_JAR_PATH);
+            if(!jarFile.isFile() || !jarFile.exists()) {
+                return showWarningMessageAndConfigure(project, JFlexBundle.message("jar.not.found", JFLEX_JAR_PATH));
+            }
         } else {
             return showWarningMessageAndConfigure(project, JFlexBundle.message("jflex.home.path.is.invalid"));
         }

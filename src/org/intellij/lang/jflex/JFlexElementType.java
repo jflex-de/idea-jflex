@@ -1,7 +1,6 @@
 package org.intellij.lang.jflex;
 
 import com.intellij.psi.tree.IElementType;
-import org.intellij.lang.jflex.fileTypes.JFlexFileTypeManager;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,7 +10,7 @@ public class JFlexElementType extends IElementType {
     private final IElementType parsedType;
 
     public JFlexElementType(@NotNull @NonNls String debugName, IElementType parsedType) {
-        super(debugName, JFlexFileTypeManager.getInstance().getFileType().getLanguage());
+        super(debugName, JFlexLanguage.LANGUAGE);
         this.parsedType = parsedType;
     }
 

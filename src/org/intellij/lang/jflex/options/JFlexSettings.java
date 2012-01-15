@@ -2,10 +2,7 @@ package org.intellij.lang.jflex.options;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.PathManager;
-import com.intellij.openapi.components.ExportableApplicationComponent;
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.components.*;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.intellij.lang.jflex.util.JFlexBundle;
 import org.jetbrains.annotations.NonNls;
@@ -19,7 +16,7 @@ import java.io.File;
  * @author Alexey Efimov
  */
 @State(name = "JFlexSettings", storages = {@Storage(id = "jflex", file = "$APP_CONFIG$/jflex.xml")})
-public final class JFlexSettings implements PersistentStateComponent<JFlexSettings>, ExportableApplicationComponent {
+public final class JFlexSettings implements PersistentStateComponent<JFlexSettings> {
     @NonNls
     static final String TOOLS_DIR = "tools";
     @NonNls
@@ -28,7 +25,7 @@ public final class JFlexSettings implements PersistentStateComponent<JFlexSettin
     static final String DEFAULT_OPTIONS_CHARAT_NOBAK = "--charat --nobak";
 
     public static JFlexSettings getInstance() {
-        return ApplicationManager.getApplication().getComponent(JFlexSettings.class);
+        return ServiceManager.getService(JFlexSettings.class);
     }
 
     public boolean ENABLED_COMPILATION = true;
@@ -45,29 +42,7 @@ public final class JFlexSettings implements PersistentStateComponent<JFlexSettin
         XmlSerializerUtil.copyBean(state, this);
     }
 
-    @NotNull
-    public File[] getExportFiles() {
-        return new File[]{PathManager.getOptionsFile("jflex")};
-    }
 
-    @NotNull
-    public String getPresentableName() {
-        return JFlexBundle.message("jflex.settings");
-    }
-
-    @NotNull
-    @NonNls
-    public String getComponentName() {
-        return "JFlexSettings";
-    }
-
-    public void initComponent() {
-
-    }
-
-    public void disposeComponent() {
-
-    }
 
     public static String getDefaultSkeletonPath(String jFlexHome) {
         return new File(jFlexHome, IDEA_FLEX_SKELETON).getPath();

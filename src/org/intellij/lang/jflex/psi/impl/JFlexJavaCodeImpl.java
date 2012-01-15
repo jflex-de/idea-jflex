@@ -27,6 +27,11 @@ public class JFlexJavaCodeImpl extends JFlexElementImpl implements JFlexJavaCode
         super(node);
     }
 
+    @Override
+    public boolean isValidHost() {
+        return true;
+    }
+
     public boolean isMatchAction() {
         ASTNode prev = getNode().getTreePrev();
         return prev != null && prev.getElementType() == JFlexElementTypes.LEFT_BRACE;

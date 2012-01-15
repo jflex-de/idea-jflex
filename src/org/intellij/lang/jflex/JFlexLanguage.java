@@ -15,7 +15,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public class JFlexLanguage extends Language {
     @NonNls
-    private static final String ID = "JFlex";
+    public static final String ID = "JFlex";
+
+    public static final JFlexLanguage LANGUAGE = new JFlexLanguage();
 
     public JFlexLanguage() {
         super(ID);

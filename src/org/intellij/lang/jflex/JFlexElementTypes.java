@@ -7,7 +7,7 @@ import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 
 public interface JFlexElementTypes {
-    IFileElementType FILE = new IFileElementType(Language.findInstance(JFlexLanguage.class));
+    IFileElementType FILE = new IFileElementType(JFlexLanguage.LANGUAGE);
 
     IElementType BAD_CHARACTER = TokenType.BAD_CHARACTER;
     IElementType WHITE_SPACE = TokenType.WHITE_SPACE;

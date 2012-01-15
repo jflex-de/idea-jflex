@@ -3,7 +3,7 @@ package org.intellij.lang.jflex.psi.impl;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.Language;
-import org.intellij.lang.jflex.fileTypes.JFlexFileTypeManager;
+import org.intellij.lang.jflex.JFlexLanguage;
 import org.intellij.lang.jflex.psi.JFlexElement;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +24,7 @@ public class JFlexElementImpl extends ASTWrapperPsiElement implements JFlexEleme
 
     @NotNull
     public Language getLanguage() {
-        return JFlexFileTypeManager.getInstance().getFileType().getLanguage();
+        return JFlexLanguage.LANGUAGE;
     }
 
     public String toString() {

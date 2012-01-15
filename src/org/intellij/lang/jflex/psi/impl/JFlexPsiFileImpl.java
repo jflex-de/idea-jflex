@@ -6,7 +6,8 @@ import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.tree.TokenSet;
 import org.intellij.lang.jflex.JFlexElementTypes;
-import org.intellij.lang.jflex.fileTypes.JFlexFileTypeManager;
+import org.intellij.lang.jflex.JFlexLanguage;
+import org.intellij.lang.jflex.fileTypes.JFlexFileType;
 import org.intellij.lang.jflex.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,7 +23,7 @@ public class JFlexPsiFileImpl extends PsiFileBase implements JFlexPsiFile {
     public static final TokenSet STATESTATEMENTSET = TokenSet.create(JFlexElementTypes.STATE_STATEMENT);
 
     public JFlexPsiFileImpl(FileViewProvider viewProvider) {
-        super(viewProvider, JFlexFileTypeManager.getInstance().getFileType().getLanguage());
+        super(viewProvider, JFlexLanguage.LANGUAGE);
     }
 
     @Nullable
@@ -81,7 +82,7 @@ public class JFlexPsiFileImpl extends PsiFileBase implements JFlexPsiFile {
 
     @NotNull
     public FileType getFileType() {
-        return JFlexFileTypeManager.getInstance().getFileType();
+        return JFlexFileType.FILE_TYPE;
     }
 
     public String toString() {

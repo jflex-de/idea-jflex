@@ -16,17 +16,19 @@ import javax.swing.*;
  * @author Alexey Efimov
  */
 public final class JFlexFileType extends LanguageFileType {
+    public static final JFlexFileType FILE_TYPE = new JFlexFileType();
+
     @NonNls
-    public static final String[] DEFAULT_ASSOCIATED_EXTENSIONS = new String[]{"flex"};
+    public static final String DEFAULT_EXTENSION = "flex";
 
     public JFlexFileType() {
-        super(new JFlexLanguage());
+        super(JFlexLanguage.LANGUAGE);
     }
 
     @NotNull
     @NonNls
     public String getDefaultExtension() {
-        return DEFAULT_ASSOCIATED_EXTENSIONS[0];
+        return DEFAULT_EXTENSION;
     }
 
     @NotNull
