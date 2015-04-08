@@ -1,0 +1,1 @@
+Plugin for IntelliJ IDEA to enables JFlex support.
