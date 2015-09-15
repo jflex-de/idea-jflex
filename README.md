@@ -6,7 +6,9 @@ This project was previously hosted on <http://code.google.com/p/idea-jflex>
 
 To build, follow the instructions on <http://www.jetbrains.org/intellij/sdk/docs/index.html> 
 to get and configure the IntelliJ IDEA Community Edition source.  Checkout the "nika" branch,
-which corresponds to build number 111, from which IntelliJ IDEA 11.0 was released.
+which corresponds to build number 111, from which IntelliJ IDEA 11.0 was released.  (See
+<http://www.jetbrains.org/pages/viewpage.action?pageId=983225> for more information about
+Community Edition branches.)
   
 Open the project in IntelliJ.  Set the project JDK to 1.6, not 1.8 as mentioned in the
 above-linked docs.
