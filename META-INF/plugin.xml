@@ -1,6 +1,6 @@
 <idea-plugin version="2">
     <name>JFlex Support</name>
-    <version>1.6.0</version>
+    <version>1.6.1</version>
     <vendor>Alexey Efimov, Max Ishchenko, Jan Dolecek, Steve Rowe</vendor>
     <change-notes><![CDATA[
     1.6.1 - Updated for JFlex 1.6.1, .jflex extension added to JFlex file type. (Steve Rowe)<br>
