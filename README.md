@@ -21,7 +21,7 @@ Make/rebuild the project, then right click on the root of the idea-jflex module 
 will be built and then saved in the module's root directory.
 
 To load the plugin into IntelliJ IDEA, copy the built archive to the config/plugins/
-directory under your $HOME/.IntelliJIDEA<X>/ directory (where <X> is the IntelliJ IDEA
+directory under your $HOME/.IntelliJIDEA\<X>/ directory (where \<X> is the IntelliJ IDEA
 major version), and then restart IntelliJ IDEA. 
 
 See <http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/publishing_plugin.html>
