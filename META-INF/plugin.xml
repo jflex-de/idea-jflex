@@ -1,8 +1,10 @@
 <idea-plugin version="2">
     <name>JFlex Support</name>
-    <version>1.5.1</version>
-    <vendor>Alexey Efimov, Max Ishchenko, Jan Dolecek</vendor>
+    <version>1.6.0</version>
+    <vendor>Alexey Efimov, Max Ishchenko, Jan Dolecek, Steve Rowe</vendor>
     <change-notes><![CDATA[
+    1.6.1 - Updated for JFlex 1.6.1, .jflex extension added to JFlex file type. (Steve Rowe)<br>
+
     1.5.1 - Updated for IDEA 11, components refactored to extensions. (Jan Dolecek)<br>
 
     1.5.0 - Updated for IDEA 10, not using jflex.bat or jflex.sh anymore, executing JFlex.Main directly instead.<br>
