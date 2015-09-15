@@ -9,6 +9,13 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="core-api" scope="PROVIDED" />
+    <orderEntry type="module" module-name="core-impl" scope="PROVIDED" />
+    <orderEntry type="module" module-name="openapi" scope="PROVIDED" />
+    <orderEntry type="module" module-name="compiler-impl" scope="PROVIDED" />
+    <orderEntry type="module" module-name="platform-impl" scope="PROVIDED" />
+    <orderEntry type="module" module-name="lang-impl" scope="PROVIDED" />
+    <orderEntry type="module" module-name="execution-openapi" scope="PROVIDED" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ACTIVE_VCS_NAME" value="svn" />
