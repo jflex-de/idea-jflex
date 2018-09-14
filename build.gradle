@@ -1,0 +1,19 @@
+plugins {
+    id "org.jetbrains.intellij" version "0.3.10"
+}
+
+group 'de.jflex.ide'
+version 'jflex-idea-plugin'
+
+sourceCompatibility = 1.7
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
