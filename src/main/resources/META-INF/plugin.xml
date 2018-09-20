@@ -1,22 +1,17 @@
 <idea-plugin version="2">
     <name>JFlex Support</name>
-    <version>1.6.1</version>
-    <vendor>Alexey Efimov, Max Ishchenko, Jan Dolecek, Steve Rowe</vendor>
-    <change-notes><![CDATA[
-    1.6.1 - Updated for JFlex 1.6.1, .jflex extension added to JFlex file type. (Steve Rowe)<br>
+    <version>1.7</version>
+    <vendor>Alexey Efimov, Max Ishchenko, Jan Dolecek, Steve Rowe, Régis Décamps</vendor>
+    <change-notes><![CDATA[v1.7
+    <ul>
+    <li>Update for JFlex 1.7.0.
+    </ul>
 
-    1.5.1 - Updated for IDEA 11, components refactored to extensions. (Jan Dolecek)<br>
-
-    1.5.0 - Updated for IDEA 10, not using jflex.bat or jflex.sh anymore, executing JFlex.Main directly instead.<br>
-
-    1.4.1 - Added support for disable compiler<br>
-
-    1.4.0 - Updated for IDEA 9.<br>
-
-    1.3.0 - Updated for IDEA 8.<br>
-
-    1.2.0 - Embedded Java code support, "Find Usages" for macroses and states, flex files can be excluded from
-    compile, "File not generated" bug fixed, settings GUI fixed.<br>
+    v1.6.1
+    <ul>
+    <li>Updated for JFlex 1.6.1
+    <li>.jflex extension added to JFlex file type. (Steve Rowe)
+    </ul>
     ]]>
     </change-notes>
 
@@ -24,7 +19,7 @@
     <resource-bundle>org.intellij.lang.jflex.util.JFlexBundle</resource-bundle>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-    <idea-version since-build="111.167"/>
+    <idea-version since-build="162"/>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
      on how to target different products -->
