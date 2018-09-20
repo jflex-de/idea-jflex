@@ -21,7 +21,7 @@
     </change-notes>
 
     <description>Enables JFlex support in IntelliJ IDEA.</description>
-    <resource-bundle>org.intellij.lang.jflex.util.JFlexBundle</resource-bundle>
+    <resource-bundle>de.jflex.ide.idea.util.JFlexBundle</resource-bundle>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
     <idea-version since-build="111.167"/>
@@ -33,19 +33,19 @@
     -->
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationConfigurable implementation="org.intellij.lang.jflex.options.JFlexConfigurable"/>
-        <colorSettingsPage implementation="org.intellij.lang.jflex.editor.colors.JFlexColorPage"/>
-        <lang.parserDefinition language="JFlex" implementationClass="org.intellij.lang.jflex.parser.JFlexParserDefinition"/>
-        <lang.documentationProvider language="JFlex" implementationClass="org.intellij.lang.jflex.JFlexDocumentationProvider"/>
-        <lang.findUsagesProvider language="JFlex" implementationClass="org.intellij.lang.jflex.JFlexFindUsagesProvider"/>
-        <lang.commenter language="JFlex" implementationClass="org.intellij.lang.jflex.JFlexCommenter"/>
-        <annotator language="JFlex" implementationClass="org.intellij.lang.jflex.validation.JFlexAnnotatingVisitor"/>
-        <languageInjector implementation="org.intellij.lang.jflex.injection.JFlexJavaInjector" />
-        <fileTypeFactory implementation="org.intellij.lang.jflex.fileTypes.JFlexFileTypeFactory" />
-        <compilerFactory implementation="org.intellij.lang.jflex.compiler.JFlexCompilerFactory" />
+        <applicationConfigurable implementation="de.jflex.ide.idea.options.JFlexConfigurable"/>
+        <colorSettingsPage implementation="de.jflex.ide.idea.editor.colors.JFlexColorPage"/>
+        <lang.parserDefinition language="JFlex" implementationClass="de.jflex.ide.idea.parser.JFlexParserDefinition"/>
+        <lang.documentationProvider language="JFlex" implementationClass="de.jflex.ide.idea.JFlexDocumentationProvider"/>
+        <lang.findUsagesProvider language="JFlex" implementationClass="de.jflex.ide.idea.JFlexFindUsagesProvider"/>
+        <lang.commenter language="JFlex" implementationClass="de.jflex.ide.idea.JFlexCommenter"/>
+        <annotator language="JFlex" implementationClass="de.jflex.ide.idea.validation.JFlexAnnotatingVisitor"/>
+        <languageInjector implementation="de.jflex.ide.idea.injection.JFlexJavaInjector" />
+        <fileTypeFactory implementation="de.jflex.ide.idea.fileTypes.JFlexFileTypeFactory" />
+        <compilerFactory implementation="de.jflex.ide.idea.compiler.JFlexCompilerFactory" />
 
-        <applicationService serviceInterface="org.intellij.lang.jflex.options.JFlexSettings"
-                            serviceImplementation="org.intellij.lang.jflex.options.JFlexSettings" />
+        <applicationService serviceInterface="de.jflex.ide.idea.options.JFlexSettings"
+                            serviceImplementation="de.jflex.ide.idea.options.JFlexSettings" />
     </extensions>
 
     <actions>
